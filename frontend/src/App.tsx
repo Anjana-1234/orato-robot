@@ -1,12 +1,14 @@
-import logo from "../public/orato-logo.jpg";
+import { Routes, Route } from "react-router-dom";
+import SignIn from "./pages/SignIn";
+import SignUp from "./pages/SignUp";
 
-export default function App() {
+function App() {
   return (
-    <>
-      <img src={logo} alt="Orato Logo" className="w-32 h-32 mx-auto my-4" />
-      <h1 className="text-3xl font-bold text-blue-500">
-        Welcome to Orato Robot !
-      </h1>
-    </>
+    <Routes>
+      <Route path="/" element={<SignIn />} />
+      <Route path="/signup" element={<SignUp />} />
+    </Routes>
   );
 }
+
+export default App;
