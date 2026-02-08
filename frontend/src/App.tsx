@@ -1,12 +1,35 @@
-import logo from "../public/orato-logo.jpg";
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
-export default function App() {
+import Home from './pages/Home';
+import Dashboard from './pages/Dashboard';
+import History from './pages/History';
+import Setting from './pages/Setting';
+import AboutUs from './pages/AboutUs';
+import Login from './pages/Login';
+import Account from './pages/Account';
+
+function App() {
   return (
-    <>
-      <img src={logo} alt="Orato Logo" className="w-32 h-32 mx-auto my-4" />
-      <h1 className="text-3xl font-bold text-blue-500">
-        Welcome to Orato Robot !
-      </h1>
-    </>
+    <Router>
+      <div className="App">
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/about" element={<AboutUs />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/history" element={<History />} />
+          <Route path="/setting" element={<Setting />} />
+          <Route path="/account" element={<Account />} />
+          <Route path="**" element={
+            <div className="flex flex-col items-center justify-center min-h-screen">
+              <h1 className="text-4xl font-bold mb-4">404 - Page Not Found</h1>
+              <a href="/" className="text-primary-purple hover:underline">Go to Home</a>
+            </div>
+          } />
+        </Routes>
+      </div>
+    </Router>
   );
 }
+
+export default App;
