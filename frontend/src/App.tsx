@@ -2,7 +2,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 import Home from './pages/Home';
 import Dashboard from './pages/Dashboard';
-import History from './pages/History';
+import Progress from './pages/Progress';
 import Setting from './pages/Setting';
 import AboutUs from './pages/AboutUs';
 import Login from './pages/Login';
@@ -17,7 +17,7 @@ function App() {
           <Route path="/about" element={<AboutUs />} />
           <Route path="/login" element={<Login />} />
           <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/history" element={<History />} />
+          <Route path="/progress" element={<Progress />} />
           <Route path="/setting" element={<Setting />} />
           <Route path="/account" element={<Account />} />
           <Route path="**" element={

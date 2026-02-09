@@ -17,14 +17,13 @@ const Footer: React.FC = () => {
           <div>
             <h3 className="text-2xl font-bold mb-4">Orato</h3>
             <p className="text-text-light text-sm leading-relaxed">
-              Build confidence in any language with intelligent emotion analysis and personalized feedback.
-            </p>
+            To deliver a personalized, step-by-step language learning journey.            </p>
           </div>
 
           {/* Column 2: Quick Links */}
           <div>
             <h4 className="text-lg font-semibold mb-6">Quick Links</h4>
-            <ul className="flex flex-col gap-3">
+            <ul className="flex flex-col gap-1">
               <li>
                 <Link to="/" className="text-text-light hover:text-light-purple transition-colors text-sm no-underline inline-block hover:translate-x-1 transition-transform">
                   Home
@@ -36,8 +35,8 @@ const Footer: React.FC = () => {
                 </Link>
               </li>
               <li>
-                <Link to="/history" className="text-text-light hover:text-light-purple transition-colors text-sm no-underline inline-block hover:translate-x-1 transition-transform">
-                  History
+                <Link to="/progress" className="text-text-light hover:text-light-purple transition-colors text-sm no-underline inline-block hover:translate-x-1 transition-transform">
+                  Progress
                 </Link>
               </li>
               <li>

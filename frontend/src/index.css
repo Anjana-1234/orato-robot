@@ -35,10 +35,10 @@
 
 @layer utilities {
   .gradient-primary {
-    background: linear-gradient(135deg, #8b2fc9, #b24bf3);
+    background: linear-gradient(135deg, #24bd39, #3dd83d);
   }
 
   .gradient-dark {
-    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+    background: linear-gradient(135deg, #3b3d3c 0%, #363d37 100%);
   }
 }

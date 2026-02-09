@@ -9,7 +9,7 @@ const Login: React.FC = () => {
       
       <main className="page-container flex justify-center items-center">
         <div className="max-w-md mx-auto">
-          <h1 className="text-4xl font-bold text-text-dark mt-10 mb-10">Login / Sign Up</h1>
+          <h1 className="text-4xl font-bold text-text-dark mt-20 mb-10">Login / Sign Up</h1>
         </div>
       </main>
       

@@ -8,7 +8,7 @@ const AboutUs: React.FC = () => {
       <Navbar isLoggedIn={false} />
       
       <main className="page-container flex justify-center items-center">
-  <h1 className="text-4xl font-bold text-text-dark mt-10 mb-10">
+  <h1 className="text-4xl font-bold text-text-dark mt-20 mb-10">
     About Us Page
   </h1>
 </main>
