@@ -2,7 +2,8 @@ import React from 'react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import LanguagePreferences from '../components/Languagepreferences'; // For importing Language Preferences component.
-import Notifications from '../components/Notifications';
+import Notifications from '../components/Notifications'; // For importing Notifications component.
+import AudioDisplay from '../components/AudioDisplay'; // For importing Audio Display component.
 
 
 
@@ -20,6 +21,7 @@ const Settings: React.FC = () => {
         <div className="space-y-6">
           <LanguagePreferences />
           <Notifications />
+          <AudioDisplay />
         </div>
       </div>
     </div>
