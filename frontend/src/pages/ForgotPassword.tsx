@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import logo from "../assets/logo.png";
 
@@ -10,6 +10,7 @@ const ForgotPassword = () => {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
+  const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -18,15 +19,21 @@ const ForgotPassword = () => {
     setError("");
 
     try {
-      const res = await axios.post(`${API}/forgot-password`, { email });
-      setMessage(res.data.message || "Password reset link sent to your email!");
-      setEmail(""); // Clear the input
+      const res = await axios.post(`${API}/forgot-password-otp`, { email });
+      
+      setMessage(res.data.message || "OTP sent to your email!");
+      
+      // Wait 1.5 seconds, then navigate to reset password page with email
+      setTimeout(() => {
+        navigate(`/reset-password?email=${encodeURIComponent(email)}`);
+      }, 1500);
+      
     } catch (error: any) {
       console.error("Forgot password error:", error);
       if (error.response) {
         setError(error.response.data.message || "Email not found!");
       } else {
-        setError("Failed to send reset link. Please try again.");
+        setError("Failed to send OTP. Please try again.");
       }
     } finally {
       setLoading(false);
@@ -47,7 +54,7 @@ const ForgotPassword = () => {
           Forgot Password?
         </h2>
         <p className="text-center text-gray-500 mb-6">
-          Enter your email to receive a password reset link
+          Enter your email to receive an OTP code
         </p>
 
         {/* Success Message */}
@@ -90,7 +97,7 @@ const ForgotPassword = () => {
                        transition-all duration-200 shadow-md hover:shadow-lg
                        ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}
           >
-            {loading ? "Sending..." : "Send Reset Link"}
+            {loading ? "Sending OTP..." : "Send OTP"}
           </button>
         </form>
 

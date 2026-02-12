@@ -6,17 +6,24 @@ import logo from "../assets/logo.png";
 const API = "http://localhost:5001/api/auth";
 
 const ResetPassword = () => {
+  const [otp, setOtp] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
 
-  // Get token from URL (e.g., /reset-password?token=abc123)
-  const token = searchParams.get("token");
+  // Get email from URL (e.g., /reset-password?email=user@example.com)
+  const email = searchParams.get("email");
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    // Validation
+    if (!otp || otp.length !== 6) {
+      alert("Please enter a valid 6-digit OTP!");
+      return;
+    }
 
     if (password !== confirmPassword) {
       alert("Passwords do not match!");
@@ -28,21 +35,23 @@ const ResetPassword = () => {
       return;
     }
 
-    if (!token) {
-      alert("Invalid or missing reset token!");
+    if (!email) {
+      alert("Email is missing! Please go back and try again.");
       return;
     }
 
     setLoading(true);
 
     try {
-      const res = await axios.post(`${API}/reset-password`, {
-        token,
+      const res = await axios.post(`${API}/reset-password-otp`, {
+        email,
+        otp,
         newPassword: password,
       });
 
       alert(res.data.message || "Password reset successful!");
       navigate("/signin");
+      
     } catch (error: any) {
       console.error("Reset password error:", error);
       if (error.response) {
@@ -69,11 +78,33 @@ const ResetPassword = () => {
           Reset Password
         </h2>
         <p className="text-center text-gray-500 mb-6">
-          Enter your new password
+          Enter the OTP sent to {email || "your email"}
         </p>
 
         {/* Form */}
         <form onSubmit={handleSubmit} className="space-y-4">
+          
+          {/* OTP Input */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              OTP Code
+            </label>
+            <input
+              type="text"
+              placeholder="Enter 6-digit OTP"
+              value={otp}
+              onChange={(e) => setOtp(e.target.value.replace(/\D/g, "").slice(0, 6))}
+              required
+              maxLength={6}
+              disabled={loading}
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent text-center text-2xl font-mono tracking-widest"
+            />
+            <p className="text-xs text-gray-500 mt-1">
+              Check your email for the 6-digit code (valid for 10 minutes)
+            </p>
+          </div>
+
+          {/* New Password */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
               New Password
@@ -90,6 +121,7 @@ const ResetPassword = () => {
             />
           </div>
 
+          {/* Confirm Password */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
               Confirm New Password
@@ -105,6 +137,7 @@ const ResetPassword = () => {
             />
           </div>
 
+          {/* Submit Button */}
           <button
             type="submit"
             disabled={loading}
@@ -114,7 +147,7 @@ const ResetPassword = () => {
                        transition-all duration-200 shadow-md hover:shadow-lg
                        ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}
           >
-            {loading ? "Resetting..." : "Reset Password"}
+            {loading ? "Resetting Password..." : "Reset Password"}
           </button>
         </form>
 
