@@ -23,8 +23,8 @@ const Navbar: React.FC<NavbarProps> = ({ isLoggedIn = false }) => {
      ${isActive ? 'text-green-500 font-semibold' : 'text-text-dark'}`;
 
   return (
-    <nav className="bg-white shadow-md sticky top-0 z-50 w-full">
-      <div className="max-w-7xl mx-auto px-8 py-4">
+    <nav className="sticky top-4 z-50 w-full px-4 sm:px-6 lg:px-8">
+      <div className="bg-green-50/70 backdrop-blur-md border border-green-100 shadow-lg rounded-2xl transition-all max-w-7xl mx-auto">        <div className="px-8 py-3">
         <div className="flex justify-between items-center">
 
           {/* Logo */}
@@ -57,10 +57,10 @@ const Navbar: React.FC<NavbarProps> = ({ isLoggedIn = false }) => {
           {/* Navigation Links */}
           <ul
             className={`
-              hidden md:flex md:items-center md:gap-8
-              absolute md:static left-1/2 -translate-x-1/2 md:translate-x-0 top-[70px]
-              ${isMobileMenuOpen ? 'flex flex-col bg-white w-full left-0 top-[70px] p-6 shadow-md' : ''}
-            `}
+                hidden md:flex md:items-center md:gap-8
+                absolute md:static left-1/2 -translate-x-1/2 md:translate-x-0 top-[70px]
+                ${isMobileMenuOpen ? 'flex flex-col bg-white w-full left-0 top-[70px] p-6 shadow-md' : ''}
+              `}
           >
             <li>
               <NavLink to="/" className={navLinkClass} onClick={closeMobileMenu}>
@@ -105,14 +105,12 @@ const Navbar: React.FC<NavbarProps> = ({ isLoggedIn = false }) => {
                 <span className="font-medium hidden md:inline">Account</span>
               </Link>
             ) : (
-              // In Navbar component - Login button (top right)
-            // In Navbar component - Login button (top right)
-<Link 
-  to="/signin"  // ← Navigate to signin page
-  className="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-lg font-semibold transition"
->
-  Login
-</Link>
+              <Link
+                to="/signin"
+                className="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-lg font-semibold transition"
+              >
+                Login
+              </Link>
             )}
 
             {/* Hamburger Menu */}
@@ -127,6 +125,7 @@ const Navbar: React.FC<NavbarProps> = ({ isLoggedIn = false }) => {
 
           </div>
         </div>
+      </div>
       </div>
     </nav>
   );
