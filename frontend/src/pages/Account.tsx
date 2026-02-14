@@ -10,7 +10,7 @@ const Account: React.FC = () => {
       <main className="max-w-6xl mx-auto px-4 py-10 space-y-8">
 
         {/* HEADER */}
-        <div>
+        <div className="pb-2 border-b border-gray-200">
           <h1 className="text-4xl font-bold text-gray-800">Account</h1>
           <p className="text-gray-500 mt-1">
             Manage your profile and learning preferences
@@ -23,14 +23,11 @@ const Account: React.FC = () => {
           <div className="flex flex-wrap justify-between items-start gap-4 mb-6">
 
             <div className="flex items-center gap-4 relative">
-
-              {/* Avatar */}
               <div className="relative">
                 <div className="w-20 h-20 rounded-full bg-green-500 flex items-center justify-center text-white text-3xl font-bold shadow">
                   JD
                 </div>
 
-                {/* camera badge */}
                 <div className="absolute -bottom-1 -right-1 bg-white border rounded-full w-7 h-7 flex items-center justify-center text-xs shadow">
                   📷
                 </div>
@@ -42,7 +39,7 @@ const Account: React.FC = () => {
               </div>
             </div>
 
-            <button className="border border-gray-300 px-4 py-2 rounded-lg hover:bg-gray-100 transition">
+            <button className="border border-gray-300 px-4 py-2 rounded-lg hover:bg-gray-100 transition font-medium">
               Edit Profile
             </button>
           </div>
@@ -57,7 +54,7 @@ const Account: React.FC = () => {
             ].map(([icon, label, value]) => (
               <div
                 key={label}
-                className="bg-gray-50 rounded-xl p-4 hover:bg-gray-100 transition"
+                className="bg-gray-50 rounded-xl p-4 hover:bg-gray-100 transition border border-gray-100"
               >
                 <p className="text-lg">{icon}</p>
                 <p className="text-sm text-gray-500">{label}</p>
@@ -76,7 +73,7 @@ const Account: React.FC = () => {
               <h3 className="text-2xl font-bold text-gray-800">
                 Learning Goals
               </h3>
-              <button className="text-sm text-green-600 hover:underline">
+              <button className="text-sm font-medium text-green-600 hover:underline">
                 + Add Goal
               </button>
             </div>
@@ -89,7 +86,7 @@ const Account: React.FC = () => {
               ].map(([title, date, progress]) => (
                 <div
                   key={title}
-                  className="border rounded-xl p-4 hover:shadow-sm transition"
+                  className="border rounded-xl p-4 hover:shadow-sm transition bg-white"
                 >
                   <p className="font-semibold text-gray-800">{title}</p>
                   <p className="text-sm text-gray-500">Target: {date}</p>
@@ -113,7 +110,7 @@ const Account: React.FC = () => {
           <div className="bg-white rounded-2xl shadow-sm p-6 hover:shadow-lg transition duration-300">
             <h3 className="text-2xl font-bold mb-4 text-gray-800">Languages</h3>
 
-            <div className="border rounded-xl p-4 space-y-3 hover:shadow-sm transition">
+            <div className="border rounded-xl p-4 space-y-3 hover:shadow-sm transition bg-white">
               <div>
                 <p className="font-semibold text-gray-800">English</p>
                 <p className="text-sm text-gray-500">Intermediate (B1)</p>
@@ -123,7 +120,7 @@ const Account: React.FC = () => {
                 <div className="bg-blue-500 h-2 rounded-full w-[75%]" />
               </div>
 
-              <button className="w-full border rounded-lg py-2 hover:bg-gray-50 transition">
+              <button className="w-full border rounded-lg py-2 hover:bg-gray-50 transition font-medium">
                 + Add Language
               </button>
             </div>
