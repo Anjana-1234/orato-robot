@@ -59,57 +59,76 @@ const Account: React.FC = () => {
         </div>
 
         {/* TWO COLUMN SECTION */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
 
           {/* LEARNING GOALS */}
-          <div className="lg:col-span-2 bg-white rounded-xl shadow p-6">
-            <div className="flex justify-between mb-4">
-              <h2 className="text-2xl font-bold">Learning Goals</h2>
-              <button className="text-green-600 font-medium">+ Add Goal</button>
+          <div className="bg-white rounded-xl shadow p-6">
+            <h3 className="text-2xl font-bold mb-4">Learning Goals</h3>
+
+            <div className="border rounded-lg p-4 mb-4">
+              <p className="font-semibold">Achieve fluency in English</p>
+              <p className="text-sm text-gray-500">Target: 2026-12-31</p>
+              <div className="w-full bg-gray-200 rounded-full h-2 mt-3">
+                <div className="bg-green-600 h-2 rounded-full w-[65%]" />
+              </div>
+              <p className="text-sm mt-2">65% complete</p>
             </div>
 
-            <div className="space-y-4">
-
-              <div className="border rounded-lg p-4">
-                <h3 className="font-semibold">Achieve fluency in English</h3>
-                <p className="text-sm text-gray-500">Target: 2026-12-31</p>
-                <div className="w-full bg-gray-200 h-2 rounded mt-2">
-                  <div className="bg-green-600 h-2 rounded w-2/3"></div>
-                </div>
-                <p className="text-sm mt-1">65% complete</p>
+            <div className="border rounded-lg p-4">
+              <p className="font-semibold">Master English pronunciation</p>
+              <p className="text-sm text-gray-500">Target: 2026-06-30</p>
+              <div className="w-full bg-gray-200 rounded-full h-2 mt-3">
+                <div className="bg-green-600 h-2 rounded-full w-[50%]" />
               </div>
-
-              <div className="border rounded-lg p-4">
-                <h3 className="font-semibold">Master English pronunciation</h3>
-                <p className="text-sm text-gray-500">Target: 2026-06-30</p>
-                <div className="w-full bg-gray-200 h-2 rounded mt-2">
-                  <div className="bg-green-600 h-2 rounded w-1/2"></div>
-                </div>
-                <p className="text-sm mt-1">40% complete</p>
-              </div>
-
+              <p className="text-sm mt-2">50% complete</p>
             </div>
           </div>
 
-          {/* LANGUAGES PANEL */}
+          {/* LANGUAGES */}
           <div className="bg-white rounded-xl shadow p-6">
-            <h2 className="text-xl font-bold mb-4">Languages</h2>
+            <h3 className="text-2xl font-bold mb-4">Languages</h3>
 
-            <div className="space-y-4">
-              <div>
-                <p className="font-medium">English</p>
-                <p className="text-sm text-gray-500">Intermediate (B1)</p>
-                <div className="w-full bg-gray-200 h-2 rounded mt-2">
-                  <div className="bg-blue-500 h-2 rounded w-3/4"></div>
-                </div>
+            <div className="border rounded-lg p-4">
+              <p className="font-semibold">English</p>
+              <p className="text-sm text-gray-500">Intermediate (B1)</p>
+
+              <div className="w-full bg-gray-200 rounded-full h-2 mt-3">
+                <div className="bg-blue-500 h-2 rounded-full w-[75%]" />
               </div>
 
-              <button className="w-full border border-gray-300 rounded-lg py-2 hover:bg-gray-100">
+              <button className="mt-4 w-full border rounded-lg py-2 hover:bg-gray-50">
                 + Add Language
               </button>
             </div>
           </div>
+        </div>
 
+        {/* ACHIEVEMENTS SECTION (NEW — COMMIT 4) */}
+        <div className="bg-white rounded-xl shadow p-6 mb-8">
+          <div className="flex justify-between items-center mb-6">
+            <h3 className="text-2xl font-bold">Achievements & Badges</h3>
+            <span className="text-gray-500 text-sm">6 earned</span>
+          </div>
+
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+
+            {[
+              "🔥 Fire Starter",
+              "⚡ Speed Demon",
+              "🏆 Champion",
+              "🎯 Perfectionist",
+              "📚 Bookworm",
+              "⭐ Rising Star",
+            ].map((badge) => (
+              <div
+                key={badge}
+                className="border rounded-lg p-4 text-center hover:shadow transition"
+              >
+                <p className="font-semibold text-sm">{badge}</p>
+              </div>
+            ))}
+
+          </div>
         </div>
 
       </main>
