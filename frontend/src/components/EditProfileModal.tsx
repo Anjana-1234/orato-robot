@@ -1,23 +1,40 @@
-import React from "react";
+import React, { useEffect } from "react";
 
 interface Props {
     onClose: () => void;
 }
 
 const EditProfileModal: React.FC<Props> = ({ onClose }) => {
-    return (
-        <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
-            <div className="bg-white rounded-2xl shadow-xl w-full max-w-lg p-6">
 
+    // Close when ESC key is pressed
+    useEffect(() => {
+        const handleEsc = (event: KeyboardEvent) => {
+            if (event.key === "Escape") {
+                onClose();
+            }
+        };
+
+        window.addEventListener("keydown", handleEsc);
+
+        return () => {
+            window.removeEventListener("keydown", handleEsc);
+        };
+    }, [onClose]);
+
+    return (
+        <div
+            className="fixed inset-0 bg-black/40 flex items-center justify-center z-50"
+            onClick={onClose}
+        >
+            {/* Prevent closing when clicking inside */}
+            <div
+                className="bg-white rounded-2xl shadow-xl w-full max-w-lg p-6"
+                onClick={(e) => e.stopPropagation()}
+            >
                 {/* HEADER */}
                 <div className="flex justify-between items-center mb-6">
                     <h2 className="text-2xl font-bold text-gray-800">Edit Profile</h2>
-                    <button
-                        onClick={onClose}
-                        className="text-gray-500 hover:text-gray-700 text-xl"
-                    >
-                        ✕
-                    </button>
+                    <button onClick={onClose}>✕</button>
                 </div>
 
                 {/* FORM */}
@@ -28,7 +45,7 @@ const EditProfileModal: React.FC<Props> = ({ onClose }) => {
                         <input
                             type="text"
                             defaultValue="John Doe"
-                            className="w-full mt-1 border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-500"
+                            className="w-full mt-1 border rounded-lg px-3 py-2"
                         />
                     </div>
 
@@ -37,13 +54,13 @@ const EditProfileModal: React.FC<Props> = ({ onClose }) => {
                         <input
                             type="email"
                             defaultValue="john.doe@example.com"
-                            className="w-full mt-1 border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-500"
+                            className="w-full mt-1 border rounded-lg px-3 py-2"
                         />
                     </div>
 
                     <div>
                         <label className="text-sm text-gray-600">Learning Language</label>
-                        <select className="w-full mt-1 border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-500">
+                        <select className="w-full mt-1 border rounded-lg px-3 py-2">
                             <option>English</option>
                             <option disabled>සිංහල (Coming Soon)</option>
                             <option disabled>தமிழ் (Coming Soon)</option>
@@ -51,34 +68,35 @@ const EditProfileModal: React.FC<Props> = ({ onClose }) => {
                     </div>
 
                     <div>
-                        <label className="text-sm text-gray-600">Current Level</label>
-                        <select className="w-full mt-1 border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-500">
-                            <option>Beginner</option>
-                            <option selected>Intermediate</option>
-                            <option>Advanced</option>
-                        </select>
+                        <label className="text-sm text-gray-600">
+                            Current Level (Auto-calculated)
+                        </label>
+
+                        <div className="w-full mt-1 border rounded-lg px-3 py-2 bg-gray-100 text-gray-600">
+                            Intermediate (System Generated)
+                        </div>
+
+                        <p className="text-xs text-gray-500 mt-1">
+                            Level is generated automatically by the system based on your learning progress.
+                        </p>
                     </div>
 
                     <div>
                         <label className="text-sm text-gray-600">Bio</label>
                         <textarea
                             rows={3}
-                            placeholder="Tell us about yourself..."
-                            className="w-full mt-1 border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-500"
+                            className="w-full mt-1 border rounded-lg px-3 py-2"
                         />
                     </div>
+
                 </div>
 
-                {/* FOOTER BUTTONS */}
+                {/* FOOTER */}
                 <div className="flex justify-end gap-3 mt-6">
-                    <button
-                        onClick={onClose}
-                        className="border px-4 py-2 rounded-lg hover:bg-gray-100 transition"
-                    >
+                    <button onClick={onClose} className="border px-4 py-2 rounded-lg">
                         Cancel
                     </button>
-
-                    <button className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition">
+                    <button className="bg-green-600 text-white px-4 py-2 rounded-lg">
                         Save Changes
                     </button>
                 </div>
