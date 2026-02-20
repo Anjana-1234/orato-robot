@@ -6,6 +6,7 @@ import authRoutes from "./routes/auth-routes.js";
 import otpRoutes from "./routes/otpRoutes.js";
 import userRoutes from "./routes/user-routes.js";
 import assessmentRoutes from "./routes/assessment-routes.js";
+import settingsRoutes from "./routes/settings.routes.js";
 import { verifyEmailConfig } from "./services/emailService.js";
 import protect from "./middleware/authMiddleware.js";
 
@@ -16,7 +17,10 @@ dotenv.config();
 const app = express();
 
 // Middleware
-app.use(cors());
+app.use(cors({
+  origin: "http://localhost:5173",
+  credentials: true,
+}));
 app.use(express.json());
 
 // Connect DB
@@ -37,6 +41,7 @@ app.get("/api/protected", protect, (req, res) => {
     user: req.user,
   });
 });
+app.use("/api/settings", settingsRoutes);
 
 // Test route
 app.get("/", (req, res) => {
