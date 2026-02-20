@@ -8,6 +8,8 @@ import {
   getProfile,
   updateProfile
 } from "../controllers/user-controller.js";
+import upload from "../middleware/upload.js";
+import cloudinary from "../config/cloudinary.js";
 
 const router = express.Router();
 
@@ -22,5 +24,34 @@ router.get("/", getAllUsers);
 router.get("/:id", getUserById);
 router.put("/:id", updateUser);
 router.delete("/:id", deleteUser);
+
+router.post(
+  "/upload-profile-picture",
+  protect,
+  upload.single("image"),
+  async (req, res) => {
+    try {
+      if (!req.file) {
+        return res.status(400).json({ message: "No file uploaded" });
+      }
+
+      const stream = cloudinary.uploader.upload_stream(
+        { folder: "profile_pictures" },
+        (error, result) => {
+          if (error) {
+            return res.status(500).json({ message: "Upload failed" });
+          }
+
+          res.json({ imageUrl: result.secure_url });
+        }
+      );
+
+      stream.end(req.file.buffer);
+
+    } catch (error) {
+      res.status(500).json({ message: "Server error" });
+    }
+  }
+);
 
 export default router;
