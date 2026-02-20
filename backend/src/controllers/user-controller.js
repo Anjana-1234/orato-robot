@@ -1,6 +1,7 @@
 import User from "../models/user.js";
 import bcrypt from "bcryptjs";
 
+
 /* =====================================================
    ADMIN CRUD (OPTIONAL - can keep for admin use)
 ===================================================== */
@@ -113,7 +114,19 @@ export const updateProfile = async (req, res) => {
 
     await user.save();
 
-    res.json({ message: "Profile updated successfully" });
+    res.status(200).json({
+      success: true,
+      message: "Profile updated successfully",
+      user: {
+        id: user._id,
+        fullName: user.fullName,
+        email: user.email,
+        bio: user.bio,
+        targetLanguage: user.targetLanguage,
+        skillLevel: user.skillLevel,
+        createdAt: user.createdAt,
+      },
+    });
   } catch (error) {
     res.status(500).json({ message: "Failed to update profile" });
   }
