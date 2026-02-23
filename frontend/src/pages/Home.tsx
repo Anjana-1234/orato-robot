@@ -26,7 +26,7 @@ const Home = () => {
             {/* Glass Card */}
             <div className="backdrop-blur-md bg-black/20 border border-white/20 rounded-3xl p-8 md:p-10 shadow-2xl">
               
-              {/* Animated Welcome Text - BALANCED SIZE */}
+              {/* Animated Welcome Text */}
               <h1 className="text-5xl md:text-5xl font-black mb-4 leading-tight animate-fade-in-up">
                 <span className="text-white drop-shadow-2xl block">Welcome to</span>
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-green-300 via-emerald-300 to-green-400 animate-gradient drop-shadow-2xl block">
@@ -94,7 +94,7 @@ const Home = () => {
                 <div className="text-gray-600 mt-2">Active Learners</div>
               </div>
               <div className="bg-white rounded-xl p-6 shadow-md">
-                <div className="text-4xl font-bold text-green-600">15+</div>
+                <div className="text-4xl font-bold text-green-600">10+</div>
                 <div className="text-gray-600 mt-2">Languages</div>
               </div>
               <div className="bg-white rounded-xl p-6 shadow-md">
@@ -107,7 +107,7 @@ const Home = () => {
         </div>
       </div>
 
-      {/* Features Section - CREATIVE VERSION */}
+      {/* Features Section - GREEN & GRAY VERSION */}
       <div className="relative bg-gradient-to-b from-white via-green-50/30 to-white py-20 overflow-hidden">
         
         {/* Decorative Background Elements */}
@@ -132,11 +132,10 @@ const Home = () => {
           {/* Features Grid */}
           <div className="grid md:grid-cols-3 gap-8">
             
-            {/* Feature 1 - Personalized Learning */}
+            {/* Feature 1 - Personalized Learning - GREEN */}
             <div className="group relative">
-              {/* Hover Glow */}
               
-              <div className="relative bg-white rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all duration-300 border-2 border-transparent group-hover:border-green-200">
+              <div className="relative bg-white rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all duration-300 border-2 border-transparent group-hover:border-green-300">
                 
                 {/* Icon Container with Animation */}
                 <div className="mb-6">
@@ -174,21 +173,20 @@ const Home = () => {
               </div>
             </div>
 
-            {/* Feature 2 - Track Progress */}
+            {/* Feature 2 - Track Progress - GRAY */}
             <div className="group relative">
-              {/* Hover Glow */}
               
-              <div className="relative bg-white rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all duration-300 border-2 border-transparent group-hover:border-blue-200">
+              <div className="relative bg-white rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all duration-300 border-2 border-transparent group-hover:border-gray-300">
                 
                 {/* Icon Container with Animation */}
                 <div className="mb-6">
-                  <div className="w-20 h-20 bg-gradient-to-br from-blue-400 to-cyan-500 rounded-2xl flex items-center justify-center transform group-hover:scale-110 group-hover:rotate-6 transition-all duration-300 shadow-lg">
+                  <div className="w-20 h-20 bg-gradient-to-br from-gray-400 to-gray-500 rounded-2xl flex items-center justify-center transform group-hover:scale-110 group-hover:rotate-6 transition-all duration-300 shadow-lg">
                     <span className="text-4xl">📊</span>
                   </div>
                 </div>
 
                 {/* Content */}
-                <h3 className="text-2xl font-bold text-gray-900 mb-3 group-hover:text-blue-600 transition-colors">
+                <h3 className="text-2xl font-bold text-gray-900 mb-3 group-hover:text-gray-700 transition-colors">
                   Track Progress
                 </h3>
                 <p className="text-gray-600 leading-relaxed mb-4">
@@ -197,16 +195,16 @@ const Home = () => {
 
                 {/* Feature Tags */}
                 <div className="flex flex-wrap gap-2">
-                  <span className="px-3 py-1 bg-blue-50 text-blue-700 text-xs font-semibold rounded-full">
+                  <span className="px-3 py-1 bg-gray-100 text-gray-700 text-xs font-semibold rounded-full">
                     Analytics
                   </span>
-                  <span className="px-3 py-1 bg-blue-50 text-blue-700 text-xs font-semibold rounded-full">
+                  <span className="px-3 py-1 bg-gray-100 text-gray-700 text-xs font-semibold rounded-full">
                     Streak Tracking
                   </span>
                 </div>
 
                 {/* Hover Arrow */}
-                <div className="mt-6 flex items-center text-blue-600 font-semibold opacity-0 group-hover:opacity-100 transform translate-x-0 group-hover:translate-x-2 transition-all duration-300">
+                <div className="mt-6 flex items-center text-gray-700 font-semibold opacity-0 group-hover:opacity-100 transform translate-x-0 group-hover:translate-x-2 transition-all duration-300">
                   <span className="text-sm">Learn More</span>
                   <svg className="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
@@ -216,21 +214,20 @@ const Home = () => {
               </div>
             </div>
 
-            {/* Feature 3 - Learn Faster */}
+            {/* Feature 3 - Learn Faster - EMERALD GREEN */}
             <div className="group relative">
-              {/* Hover Glow */}
               
-              <div className="relative bg-white rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all duration-300 border-2 border-transparent group-hover:border-purple-200">
+              <div className="relative bg-white rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all duration-300 border-2 border-transparent group-hover:border-emerald-300">
                 
                 {/* Icon Container with Animation */}
                 <div className="mb-6">
-                  <div className="w-20 h-20 bg-gradient-to-br from-purple-400 to-pink-500 rounded-2xl flex items-center justify-center transform group-hover:scale-110 group-hover:rotate-6 transition-all duration-300 shadow-lg">
+                  <div className="w-20 h-20 bg-gradient-to-br from-emerald-400 to-emerald-600 rounded-2xl flex items-center justify-center transform group-hover:scale-110 group-hover:rotate-6 transition-all duration-300 shadow-lg">
                     <span className="text-4xl">⚡</span>
                   </div>
                 </div>
 
                 {/* Content */}
-                <h3 className="text-2xl font-bold text-gray-900 mb-3 group-hover:text-purple-600 transition-colors">
+                <h3 className="text-2xl font-bold text-gray-900 mb-3 group-hover:text-emerald-600 transition-colors">
                   Learn Faster
                 </h3>
                 <p className="text-gray-600 leading-relaxed mb-4">
@@ -239,21 +236,163 @@ const Home = () => {
 
                 {/* Feature Tags */}
                 <div className="flex flex-wrap gap-2">
-                  <span className="px-3 py-1 bg-purple-50 text-purple-700 text-xs font-semibold rounded-full">
+                  <span className="px-3 py-1 bg-emerald-50 text-emerald-700 text-xs font-semibold rounded-full">
                     Micro-lessons
                   </span>
-                  <span className="px-3 py-1 bg-purple-50 text-purple-700 text-xs font-semibold rounded-full">
+                  <span className="px-3 py-1 bg-emerald-50 text-emerald-700 text-xs font-semibold rounded-full">
                     Flexible
                   </span>
                 </div>
 
                 {/* Hover Arrow */}
-                <div className="mt-6 flex items-center text-purple-600 font-semibold opacity-0 group-hover:opacity-100 transform translate-x-0 group-hover:translate-x-2 transition-all duration-300">
+                <div className="mt-6 flex items-center text-emerald-600 font-semibold opacity-0 group-hover:opacity-100 transform translate-x-0 group-hover:translate-x-2 transition-all duration-300">
                   <span className="text-sm">Learn More</span>
                   <svg className="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                   </svg>
                 </div>
+
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+      </div>
+
+      {/* How ORATO Works Section - GREEN & GRAY */}
+      <div className="relative bg-gradient-to-br from-green-50 to-emerald-100 py-20 overflow-hidden">
+        
+        {/* Background Decorations */}
+        <div className="absolute top-0 left-0 w-64 h-64 bg-green-300/20 rounded-full blur-3xl"></div>
+        <div className="absolute bottom-0 right-0 w-96 h-96 bg-emerald-300/20 rounded-full blur-3xl"></div>
+
+        <div className="relative z-10 max-w-7xl mx-auto px-4">
+          
+          <div className="text-center mb-16">
+            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
+              How Orato Works
+            </h2>
+            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+              Start learning English confidently in 4 simple steps
+            </p>
+          </div>
+
+          {/* Steps Grid */}
+          <div className="grid md:grid-cols-4 gap-8">
+            
+            {/* Step 1 - Create Account - GREEN */}
+            <div className="group relative">
+              <div className="relative bg-white rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all duration-300 transform group-hover:-translate-y-2">
+                
+                {/* Icon Circle */}
+                <div className="mb-6 flex justify-center">
+                  <div className="w-16 h-16 bg-gradient-to-br from-green-500 to-green-600 rounded-full flex items-center justify-center transform group-hover:scale-110 transition-all duration-300 shadow-lg">
+                    <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+                    </svg>
+                  </div>
+                </div>
+
+                {/* Step Number */}
+                <div className="text-8xl font-black text-green-100 absolute top-4 right-4 -z-10">
+                  1
+                </div>
+
+                {/* Content */}
+                <h3 className="text-xl font-bold text-gray-900 mb-3 text-center">
+                  Create Account
+                </h3>
+                <p className="text-gray-600 text-center text-sm leading-relaxed">
+                  Sign up free and take a quick test to determine your English level.
+                </p>
+
+              </div>
+            </div>
+
+            {/* Step 2 - Set Your Goals - EMERALD */}
+            <div className="group relative">
+              <div className="relative bg-white rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all duration-300 transform group-hover:-translate-y-2">
+                
+                {/* Icon Circle */}
+                <div className="mb-6 flex justify-center">
+                  <div className="w-16 h-16 bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-full flex items-center justify-center transform group-hover:scale-110 transition-all duration-300 shadow-lg">
+                    <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                  </div>
+                </div>
+
+                {/* Step Number */}
+                <div className="text-8xl font-black text-emerald-100 absolute top-4 right-4 -z-10">
+                  2
+                </div>
+
+                {/* Content */}
+                <h3 className="text-xl font-bold text-gray-900 mb-3 text-center">
+                  Set Your Goals
+                </h3>
+                <p className="text-gray-600 text-center text-sm leading-relaxed">
+                  Tell us your objectives and we create a personalized learning path.
+                </p>
+
+              </div>
+            </div>
+
+            {/* Step 3 - Learn Daily - GRAY */}
+            <div className="group relative">
+              <div className="relative bg-white rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all duration-300 transform group-hover:-translate-y-2">
+                
+                {/* Icon Circle */}
+                <div className="mb-6 flex justify-center">
+                  <div className="w-16 h-16 bg-gradient-to-br from-gray-500 to-gray-600 rounded-full flex items-center justify-center transform group-hover:scale-110 transition-all duration-300 shadow-lg">
+                    <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                    </svg>
+                  </div>
+                </div>
+
+                {/* Step Number */}
+                <div className="text-8xl font-black text-gray-100 absolute top-4 right-4 -z-10">
+                  3
+                </div>
+
+                {/* Content */}
+                <h3 className="text-xl font-bold text-gray-900 mb-3 text-center">
+                  Learn Daily
+                </h3>
+                <p className="text-gray-600 text-center text-sm leading-relaxed">
+                  Practice with AI tutors, interactive lessons, and real-world scenarios.
+                </p>
+
+              </div>
+            </div>
+
+            {/* Step 4 - Track Progress - TEAL GREEN */}
+            <div className="group relative">
+              <div className="relative bg-white rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all duration-300 transform group-hover:-translate-y-2">
+                
+                {/* Icon Circle */}
+                <div className="mb-6 flex justify-center">
+                  <div className="w-16 h-16 bg-gradient-to-br from-teal-500 to-teal-600 rounded-full flex items-center justify-center transform group-hover:scale-110 transition-all duration-300 shadow-lg">
+                    <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+                    </svg>
+                  </div>
+                </div>
+
+                {/* Step Number */}
+                <div className="text-8xl font-black text-teal-100 absolute top-4 right-4 -z-10">
+                  4
+                </div>
+
+                {/* Content */}
+                <h3 className="text-xl font-bold text-gray-900 mb-3 text-center">
+                  Track Progress
+                </h3>
+                <p className="text-gray-600 text-center text-sm leading-relaxed">
+                  Monitor improvement with detailed analytics and celebrate milestones.
+                </p>
 
               </div>
             </div>
@@ -453,7 +592,7 @@ const Home = () => {
         </div>
       </div>
 
-      {/* Final CTA with Image - REDUCED HEIGHT */}
+      {/* Final CTA with Image */}
       <div className="relative bg-gradient-to-br from-gray-900 to-black py-16 overflow-hidden">
         
         {/* Glow Effects */}
@@ -467,7 +606,7 @@ const Home = () => {
             {/* LEFT - Content */}
             <div>
               
-              {/* Headline - SMALLER */}
+              {/* Headline */}
               <h2 className="text-4xl md:text-5xl font-black text-white mb-4 leading-tight">
                 Stop Dreaming.
                 <br />
@@ -476,12 +615,12 @@ const Home = () => {
                 </span>
               </h2>
 
-              {/* Description - SMALLER */}
+              {/* Description */}
               <p className="text-lg text-gray-300 mb-6 leading-relaxed">
                 Your journey to fluency starts today. Join thousands who transformed their lives with just 15 minutes a day.
               </p>
 
-              {/* Benefits List - COMPACT */}
+              {/* Benefits List */}
               <div className="space-y-3 mb-6">
                 <div className="flex items-center gap-3">
                   <div className="flex-shrink-0 w-5 h-5 bg-green-500 rounded-full flex items-center justify-center">
@@ -509,7 +648,7 @@ const Home = () => {
                 </div>
               </div>
 
-              {/* CTA Button - SMALLER */}
+              {/* CTA Button */}
               <Link
                 to="/signup"
                 className="inline-flex items-center gap-3 px-8 py-3 bg-gradient-to-r from-green-500 to-emerald-600 text-white rounded-xl font-bold text-lg hover:from-green-600 hover:to-emerald-700 transition-all shadow-2xl hover:shadow-green-500/50 hover:scale-105"
@@ -520,13 +659,13 @@ const Home = () => {
                 </svg>
               </Link>
 
-              {/* Social Proof - SMALLER */}
+              {/* Social Proof */}
               <div className="mt-6 flex items-center gap-3">
                 <div className="flex -space-x-2">
                   <div className="w-8 h-8 rounded-full bg-green-500 border-2 border-gray-900"></div>
-                  <div className="w-8 h-8 rounded-full bg-blue-500 border-2 border-gray-900"></div>
-                  <div className="w-8 h-8 rounded-full bg-purple-500 border-2 border-gray-900"></div>
-                  <div className="w-8 h-8 rounded-full bg-orange-500 border-2 border-gray-900"></div>
+                  <div className="w-8 h-8 rounded-full bg-emerald-500 border-2 border-gray-900"></div>
+                  <div className="w-8 h-8 rounded-full bg-teal-500 border-2 border-gray-900"></div>
+                  <div className="w-8 h-8 rounded-full bg-gray-500 border-2 border-gray-900"></div>
                 </div>
                 <div className="text-gray-400 text-xs">
                   <span className="text-white font-bold">2,847 people</span> joined this week
