@@ -59,3 +59,16 @@ app.get('/api/progress/:userId', (req, res) => {
     res.status(500).json({ message: "Internal server error" });
   }
 });
+
+// A simple health check route
+app.get('/health', (req, res) => {
+  res.status(200).json({ status: "Orato Backend is running perfectly! 🚀" });
+});
+
+// --- START SERVER ---
+app.listen(PORT, () => {
+  console.log(`=================================`);
+  console.log(`🚀 Orato Backend Server Started!`);
+  console.log(`📡 Listening on http://localhost:${PORT}`);
+  console.log(`=================================`);
+});
