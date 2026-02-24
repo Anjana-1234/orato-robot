@@ -34,3 +34,28 @@ const mockDatabase = {
     ]
   }
 };
+// --- API ROUTES ---
+
+// GET: Fetch progress data for a specific user
+app.get('/api/progress/:userId', (req, res) => {
+  try {
+    const userId = req.params.userId;
+    
+    // Simulate a slight network delay so you can see the loading spinner on the frontend!
+    setTimeout(() => {
+      const userData = mockDatabase[userId];
+
+      if (!userData) {
+        return res.status(404).json({ message: "User not found" });
+      }
+
+      // Send the data back to the React frontend
+      res.status(200).json(userData);
+      
+    }, 800); // 800ms delay
+
+  } catch (error) {
+    console.error("Error fetching progress data:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+});
