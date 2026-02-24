@@ -1,194 +1,3 @@
-// import React, { useState } from "react";
-// import Navbar from "../components/Navbar";
-// import Footer from "../components/Footer";
-// import EditProfileModal from "../components/EditProfileModal";
-// import AddGoalModal from "../components/AddGoalModal";
-
-// const Account: React.FC = () => {
-//   const [isEditOpen, setIsEditOpen] = useState(false);
-//   const [isAddGoalOpen, setIsAddGoalOpen] = useState(false);
-
-//   return (
-//     <div className="min-h-screen bg-green-100">
-//       <Navbar isLoggedIn={true} />
-
-//       <main className="max-w-6xl mx-auto px-4 py-10 space-y-8">
-
-//         {/* HEADER */}
-//         <div className="pb-3 border-b border-gray-200">
-//           <h1 className="text-4xl font-bold tracking-tight text-gray-800">
-//             Account
-//           </h1>
-//           <p className="text-gray-500 mt-1">
-//             Manage your profile and learning preferences
-//           </p>
-//         </div>
-
-//         {/* PROFILE CARD */}
-//         <section className="bg-white rounded-2xl shadow-md hover:shadow-xl hover:-translate-y-1 hover:border-green-200 transition-all duration-300 p-6">
-
-//           <div className="flex flex-wrap justify-between items-start gap-4 mb-6">
-
-//             <div className="flex items-center gap-4">
-//               <div className="relative">
-//                 <div className="w-20 h-20 rounded-full bg-green-500 flex items-center justify-center text-white text-3xl font-bold shadow">
-//                   JD
-//                 </div>
-
-//                 <div className="absolute -bottom-1 -right-1 bg-white border rounded-full w-7 h-7 flex items-center justify-center text-xs shadow">
-//                   📷
-//                 </div>
-//               </div>
-
-//               <div>
-//                 <h2 className="text-3xl font-bold text-gray-800">John Doe</h2>
-//                 <p className="text-gray-500">john.doe@example.com</p>
-//               </div>
-//             </div>
-
-//             <button
-//               onClick={() => setIsEditOpen(true)}
-//               className="border border-gray-300 px-4 py-2 rounded-lg hover:bg-gray-100 transition font-medium"
-//             >
-//               Edit Profile
-//             </button>
-//           </div>
-
-//           {/* STATS */}
-//           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-//             {[
-//               ["📘", "Total Study Time", "47.5 hours"],
-//               ["🎯", "Current Level", "Intermediate"],
-//               ["🌍", "Languages Learning", "1"],
-//               ["🏆", "Lessons Completed", "47"],
-//             ].map(([icon, label, value]) => (
-//               <div
-//                 key={label}
-//                 className="bg-gray-50 rounded-xl p-4 border border-gray-100 hover:bg-green-50 transition"
-//               >
-//                 <p className="text-lg">{icon}</p>
-//                 <p className="text-sm text-gray-500">{label}</p>
-//                 <p className="font-bold text-xl mt-1 text-gray-800">{value}</p>
-//               </div>
-//             ))}
-//           </div>
-//         </section>
-
-//         {/* MAIN GRID */}
-//         <section className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-
-//           {/* LEARNING GOALS */}
-//           <div className="bg-white rounded-2xl shadow-md hover:shadow-xl hover:-translate-y-1 hover:border-green-200 transition-all duration-300 p-6">
-//             <div className="flex justify-between items-center mb-4">
-//               <h3 className="text-2xl font-bold text-gray-800">
-//                 Learning Goals
-//               </h3>
-
-//               <button
-//                 onClick={() => setIsAddGoalOpen(true)}
-//                 className="text-sm font-medium text-green-600 hover:font-bold transition"
-//               >
-//                 + Add Goal
-//               </button>
-//             </div>
-
-//             {/* EMPTY STATE */}
-//             <p className="text-gray-500 text-sm">
-//               Set your first goal to start tracking your progress
-//             </p>
-//           </div>
-
-//           {/* LANGUAGES */}
-//           <div className="bg-white rounded-2xl shadow-md hover:shadow-xl hover:-translate-y-1 hover:border-green-200 transition-all duration-300 p-6">
-//             <h3 className="text-2xl font-bold mb-4 text-gray-800">
-//               Languages
-//             </h3>
-
-//             <div className="border rounded-xl p-4 space-y-3 bg-white hover:bg-green-50 transition">
-//               <div>
-//                 <p className="font-semibold text-gray-800">English</p>
-//                 <p className="text-sm text-gray-500">Intermediate (B1)</p>
-//               </div>
-
-//               <div className="w-full bg-gray-200 rounded-full h-2 overflow-hidden">
-//                 <div className="bg-blue-500 h-2 rounded-full w-[75%]" />
-//               </div>
-
-//               {/* Add Language Button */}
-//               <div className="relative group w-full">
-//                 <button
-//                   disabled
-//                   className="w-full border rounded-lg py-2 font-medium cursor-not-allowed"
-//                 >
-//                   + Add Language
-//                 </button>
-
-//                 <div className="absolute -top-8 left-1/2 -translate-x-1/2 
-//                   bg-gray-800 text-white text-xs px-2 py-1 rounded 
-//                   opacity-0 group-hover:opacity-100 transition pointer-events-none">
-//                   Coming soon
-//                 </div>
-//               </div>
-//             </div>
-//           </div>
-//         </section>
-
-//         {/* BADGES */}
-//         <section className="bg-white rounded-2xl shadow-sm p-6 hover:shadow-lg transition duration-300">
-//           <div className="flex justify-between items-center mb-6">
-//             <h3 className="text-2xl font-bold text-gray-800">
-//               Achievements & Badges
-//             </h3>
-//             <span className="text-sm text-gray-500">6 earned</span>
-//           </div>
-
-//           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-//             {[
-//               ["🔥", "Fire Starter", "Earned"],
-//               ["⚡", "Speed Demon", "Earned"],
-//               ["🏆", "Champion", "Earned"],
-//               ["🎯", "Perfectionist", "Earned"],
-//               ["📚", "Bookworm", "Earned"],
-//               ["⭐", "Rising Star", "Earned"],
-//             ].map(([icon, title, status]) => (
-//               <div
-//                 key={title}
-//                 className="
-//           bg-white border border-gray-200 rounded-xl p-4
-//           shadow-sm hover:shadow-lg hover:-translate-y-1
-//           hover:border-green-300 hover:ring-2 hover:ring-green-100
-//           transition-all duration-300 cursor-pointer
-//         "
-//               >
-//                 <div className="w-10 h-10 rounded-full bg-green-50 flex items-center justify-center text-xl mb-3">
-//                   {icon}
-//                 </div>
-
-//                 <p className="font-semibold text-sm text-gray-800">{title}</p>
-//                 <p className="text-xs text-gray-400 mt-1">{status}</p>
-//               </div>
-//             ))}
-//           </div>
-//         </section>
-
-//       </main>
-
-//       <Footer />
-
-//       {/* MODALS */}
-//       {isEditOpen && (
-//         <EditProfileModal onClose={() => setIsEditOpen(false)} />
-//       )}
-
-//       {isAddGoalOpen && (
-//         <AddGoalModal onClose={() => setIsAddGoalOpen(false)} />
-//       )}
-//     </div>
-//   );
-// };
-
-// export default Account;
-
 import React, { useState, useEffect } from "react";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
@@ -202,7 +11,8 @@ const Account: React.FC = () => {
   const [isEditOpen, setIsEditOpen] = useState(false);
   const [isAddGoalOpen, setIsAddGoalOpen] = useState(false);
   const [user, setUser] = useState<any>(null);
-  const [uploading, setUploading] = useState(false); // ✅ loading state
+  const [uploading, setUploading] = useState(false);
+  const [isLanguageOpen, setIsLanguageOpen] = useState(false);
 
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
@@ -284,7 +94,7 @@ const Account: React.FC = () => {
             </p>
           </div>
 
-          {/* PROFILE CARD */}
+          {/* PROFILE Section */}
           <section className="bg-white rounded-2xl shadow-md p-8">
 
             {/* TOP ROW */}
@@ -293,7 +103,7 @@ const Account: React.FC = () => {
               {/* LEFT SIDE */}
               <div className="flex items-start gap-6">
 
-                {/* ✅ AVATAR WITH LOADING STATE */}
+                {/* AVATAR WITH LOADING STATE */}
                 <label className="group relative cursor-pointer">
                   {uploading ? (
                     <div className="w-24 h-24 rounded-full bg-gray-200 flex items-center justify-center animate-pulse shadow-md">
@@ -442,6 +252,38 @@ hover:border-emerald-400 cursor-pointer">
 
           </section>
 
+          {/* LANGUAGES SECTION */}
+          <section className="bg-white rounded-2xl shadow-md p-8">
+            <div className="flex justify-between items-center mb-6">
+              <h2 className="text-2xl font-semibold text-gray-800">
+                Languages
+              </h2>
+
+              <button
+                onClick={() => setIsLanguageOpen(true)}
+                className="text-emerald-600 font-semibold 
+transition-all duration-200 ease-in-out 
+hover:text-emerald-700 
+hover:font-bold 
+hover:scale-105
+hover:tracking-wide"              >
+                + Add Language
+              </button>
+            </div>
+
+            <div
+              onDoubleClick={() => setIsLanguageOpen(true)}
+              className="bg-gray-50 rounded-xl p-6 border cursor-pointer hover:bg-gray-100 transition"
+            >
+              <p className="text-gray-800 font-semibold">
+                Native Speaker → English
+              </p>
+              <p className="text-sm text-gray-500 mt-2">
+                {user.skillLevel || "Beginner"}
+              </p>
+            </div>
+          </section>
+
         </main>
       </PageBackground>
 
@@ -460,6 +302,52 @@ hover:border-emerald-400 cursor-pointer">
       {isAddGoalOpen && (
         <AddGoalModal onClose={() => setIsAddGoalOpen(false)} />
       )}
+
+      {isLanguageOpen && (
+        <div
+          className="fixed inset-0 bg-black/40 flex items-center justify-center z-50"
+          onClick={() => setIsLanguageOpen(false)}   // closes when clicking outside
+        >
+          <div
+            className="bg-white rounded-2xl shadow-xl w-[400px] p-6 space-y-4 animate-scaleIn"
+            onClick={(e) => e.stopPropagation()}     // prevents closing when clicking inside
+          >
+            <h3 className="text-xl font-semibold">Add Language</h3>
+
+            {/* English (selected) */}
+            <div className="border rounded-lg p-4 bg-emerald-50 border-emerald-400">
+              <p className="font-semibold text-gray-800">English</p>
+              <p className="text-xs text-gray-500">Already selected</p>
+            </div>
+
+            {/* Sinhala */}
+            <div className="border rounded-lg p-4 opacity-60 cursor-not-allowed relative">
+              <p className="font-semibold text-gray-800">Sinhala</p>
+              <span className="absolute top-2 right-2 text-xs bg-gray-200 px-2 py-1 rounded">
+                Coming soon
+              </span>
+            </div>
+
+            {/* Tamil */}
+            <div className="border rounded-lg p-4 opacity-60 cursor-not-allowed relative">
+              <p className="font-semibold text-gray-800">Tamil</p>
+              <span className="absolute top-2 right-2 text-xs bg-gray-200 px-2 py-1 rounded">
+                Coming soon
+              </span>
+            </div>
+
+            <button
+              onClick={() => setIsLanguageOpen(false)}
+              className="w-full bg-gray-100 rounded-lg py-2 mt-4 hover:bg-gray-200 transition"
+            >
+              Close
+            </button>
+
+          </div>
+        </div>
+      )}
+
+
     </div>
   );
 };
