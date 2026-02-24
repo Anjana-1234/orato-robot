@@ -1,19 +1,43 @@
-import React from 'react';
-import Navbar from '../components/Navbar';
-import Footer from '../components/Footer';
+import { useState, useEffect, useMemo } from 'react';
+import { 
+  Calendar, 
+  BookOpen, 
+  Trophy, 
+  Clock, 
+  Star, 
+  TrendingUp,
+  ChevronRight,
+  Loader2 // Added for loading state
+} from 'lucide-react';
 
-const Progrees: React.FC = () => {
-  return (
-    <div className="page-wrapper">
-      <Navbar isLoggedIn={true} />
+// --- TYPES ---
+interface Lesson {
+  id: number;
+  title: string;
+  language: string;
+  icon: string;
+  date: string;
+  time: string;
+  score: number;
+  duration: string;
+  points: number;
+}
 
-      <main className="page-container flex justify-center items-center">
-        <h1 className="text-4xl font-bold text-text-dark mt-20 mb-10">Progress Page</h1>
-      </main>
+interface StatItem {
+  day: string;
+  lessons: number;
+  points: number;
+}
 
-      <Footer />
-    </div>
-  );
-};
+interface Activity {
+  id: number;
+  type: string;
+  title: string;
+  time: string;
+  icon: string;
+}
 
-export default Progrees;
+interface ProgressProps {
+  darkMode: boolean;
+}
+
