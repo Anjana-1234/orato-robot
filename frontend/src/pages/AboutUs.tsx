@@ -3,6 +3,7 @@ import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import OurMission from '../components/OurMission';
 import DifferentUs from '../components/DifferentUs';
+import MeetOurTeam from '../components/OurTeam';
 
 const AboutUs: React.FC = () => {
   return (
@@ -19,6 +20,7 @@ const AboutUs: React.FC = () => {
         </header>
         <OurMission />
         <DifferentUs />
+        <MeetOurTeam />
       </main>
 
       <Footer />
