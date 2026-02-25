@@ -4,6 +4,7 @@ import Footer from '../components/Footer';
 import OurMission from '../components/OurMission';
 import DifferentUs from '../components/DifferentUs';
 import MeetOurTeam from '../components/OurTeam';
+import PoweredByTechnology from '../components/TechnologyUs';
 
 const AboutUs: React.FC = () => {
   return (
@@ -21,6 +22,7 @@ const AboutUs: React.FC = () => {
         <OurMission />
         <DifferentUs />
         <MeetOurTeam />
+        <PoweredByTechnology />
       </main>
 
       <Footer />
