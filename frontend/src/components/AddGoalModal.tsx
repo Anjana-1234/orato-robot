@@ -2,10 +2,12 @@ import React, { useEffect, useState } from "react";
 
 interface Props {
   onClose: () => void;
+  onAdd: (goal: any) => void;
 }
 
-const AddGoalModal: React.FC<Props> = ({ onClose }) => {
+const AddGoalModal: React.FC<Props> = ({ onClose, onAdd }) => {
   const [title, setTitle] = useState("");
+  const [target, setTarget] = useState(50);
   const [date, setDate] = useState("");
   const [show, setShow] = useState(false);
 
@@ -25,22 +27,34 @@ const AddGoalModal: React.FC<Props> = ({ onClose }) => {
     setTimeout(() => onClose(), 200);
   };
 
+  const handleSave = () => {
+    if (!title || !date) return;
+
+    onAdd({
+      title,
+      target: Number(target),
+      deadline: date,
+    });
+
+    handleClose();
+  };
+
   return (
     <div
-      className={`fixed inset-0 flex items-center justify-center z-50 transition-opacity duration-200 ${
-        show ? "bg-black/40 opacity-100" : "bg-black/0 opacity-0"
-      }`}
+      className={`fixed inset-0 flex items-center justify-center z-50 transition-opacity duration-200 ${show ? "bg-black/40 opacity-100" : "bg-black/0 opacity-0"
+        }`}
       onClick={handleClose}
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        className={`bg-white rounded-2xl shadow-xl w-full max-w-md p-6 transition-all duration-200 ${
-          show ? "scale-100 opacity-100" : "scale-95 opacity-0"
-        }`}
+        className={`bg-white rounded-2xl shadow-xl w-full max-w-md p-6 transition-all duration-200 ${show ? "scale-100 opacity-100" : "scale-95 opacity-0"
+          }`}
       >
         {/* HEADER */}
         <div className="flex justify-between items-center mb-6">
-          <h2 className="text-xl font-bold text-gray-800">Add Learning Goal</h2>
+          <h2 className="text-xl font-bold text-gray-800">
+            Add Learning Goal
+          </h2>
           <button onClick={handleClose}>✕</button>
         </div>
 
@@ -60,6 +74,17 @@ const AddGoalModal: React.FC<Props> = ({ onClose }) => {
               <option>Improve Writing Clarity</option>
               <option>Achieve Balanced Skill Growth</option>
             </select>
+          </div>
+
+          <div>
+            <label className="text-sm text-gray-600">Target Value</label>
+            <input
+              type="number"
+              value={target}
+              onChange={(e) => setTarget(Number(e.target.value))}
+              min="1"
+              className="w-full mt-1 border rounded-lg px-3 py-2"
+            />
           </div>
 
           <div>
@@ -84,6 +109,7 @@ const AddGoalModal: React.FC<Props> = ({ onClose }) => {
           </button>
 
           <button
+            onClick={handleSave}
             disabled={!title || !date}
             className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 disabled:opacity-50 transition"
           >
