@@ -28,17 +28,14 @@ const AccountActions: React.FC<AccountActionsProps> = ({ userId }) => {
     };
 
     const confirmDelete = async (): Promise<void> => {
-        const stored = localStorage.getItem('user');
-        const uid = stored ? (JSON.parse(stored).id || JSON.parse(stored)._id) : null;
-
-        if (!uid) {
-            alert('Deleting accounts is permanent.');
+        if (!userId) {
+            alert('Unable to identify user session. Please try logging in again.');
             setShowDeleteConfirm(false);
             return;
         }
 
         try {
-            await axios.delete(`http://localhost:5001/api/settings/${uid}`);
+            await axios.delete(`http://localhost:5001/api/settings/${userId}`);
             localStorage.removeItem('token');
             localStorage.removeItem('user');
             setShowDeleteConfirm(false);
