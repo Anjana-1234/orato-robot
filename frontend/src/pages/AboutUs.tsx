@@ -1,6 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import aboutBg from '../assets/AboutUs.jpg';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import OurMission from '../components/OurMission';
@@ -11,7 +9,6 @@ import PoweredByTechnology from '../components/TechnologyUs';
 import { FaArrowUp } from 'react-icons/fa';
 
 const AboutUs: React.FC = () => {
-  const navigate = useNavigate();
   const [showScrollTop, setShowScrollTop] = useState(false);
 
   useEffect(() => {
@@ -38,40 +35,13 @@ const AboutUs: React.FC = () => {
     <div className="page-wrapper">
       <Navbar isLoggedIn={false} />
 
-      <main className="bg-[#f0faf6] min-h-screen relative overflow-x-hidden">
+      <main className="bg-[#f0faf6] min-h-screen relative">
         {/* Page Header */}
-        <header
-          className="relative min-h-[60vh] md:min-h-[80vh] flex items-center justify-end px-6 md:px-20 bg-cover bg-center bg-no-repeat"
-          style={{ backgroundImage: `url(${aboutBg})` }}
-        >
-          {/* Dark Overlay - No Blur */}
-          <div className="absolute inset-0 bg-black/50"></div>
-
-          <div className="relative z-10 w-full max-w-xl">
-            <div className="bg-black/40 backdrop-blur-md border border-white/10 p-8 md:p-12 rounded-[2.5rem] shadow-2xl">
-              <h1 className="text-4xl md:text-6xl font-black text-white mb-2 tracking-tight">
-                About <br />
-                <span className="text-[#1a9e6b]">ORATO</span>
-              </h1>
-
-              {/* Decorative Green Line */}
-              <div className="w-20 h-1.5 bg-[#1a9e6b] rounded-full mb-8"></div>
-
-              <p className="text-lg md:text-xl text-gray-200 leading-relaxed font-medium">
-                Making language learning accessible, engaging, and effective for everyone around the world.
-              </p>
-
-              {/* Action Buttons (Optional, added for visual parity with screenshot) */}
-              <div className="mt-10 flex flex-wrap gap-4">
-                <button
-                  onClick={() => navigate('/signup')}
-                  className="px-8 py-3 bg-[#1a9e6b] text-white font-bold rounded-xl hover:bg-[#14c781] transition-all duration-300"
-                >
-                  Join Us
-                </button>
-              </div>
-            </div>
-          </div>
+        <header className="text-center pt-20 pb-10 px-10 bg-[#f0faf6]">
+          <h1 className="text-5xl font-black text-[#0d2d2a] mb-4 tracking-tight">About ORATO</h1>
+          <p className="text-lg text-[#4a7060] max-w-xl mx-auto leading-relaxed">
+            Making language learning accessible, engaging, and effective for everyone around the world.
+          </p>
         </header>
         <OurMission />
         <OurVision />
@@ -97,6 +67,7 @@ const AboutUs: React.FC = () => {
           </span>
         </button>
       </main>
+
 
       <Footer />
     </div>

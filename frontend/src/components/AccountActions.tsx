@@ -28,14 +28,17 @@ const AccountActions: React.FC<AccountActionsProps> = ({ userId }) => {
     };
 
     const confirmDelete = async (): Promise<void> => {
-        if (!userId) {
+        const stored = localStorage.getItem('user');
+        const uid = stored ? (JSON.parse(stored).id || JSON.parse(stored)._id) : null;
+
+        if (!uid) {
             alert('Deleting accounts is permanent.');
             setShowDeleteConfirm(false);
             return;
         }
 
         try {
-            await axios.delete(`http://localhost:5001/api/settings/${userId}`);
+            await axios.delete(`http://localhost:5001/api/settings/${uid}`);
             localStorage.removeItem('token');
             localStorage.removeItem('user');
             setShowDeleteConfirm(false);
