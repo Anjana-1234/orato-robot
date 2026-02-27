@@ -1,4 +1,5 @@
 import { useState, useEffect, useMemo } from 'react';
+import Navbar from "frontend/src/components/Navbar.tsx";
 import { 
   Calendar, 
   BookOpen, 
