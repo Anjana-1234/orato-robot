@@ -12,6 +12,7 @@ import {
   ChevronRight,
   Loader2 // Added for loading state
 } from 'lucide-react';
+import API from '../services/api';
 
 // --- TYPES ---
 interface Lesson {
@@ -40,10 +41,6 @@ interface Activity {
   icon: string;
 }
 
-interface ProgressProps {
-  darkMode: boolean;
-}
-
 // --- SUB-COMPONENTS ---
 const StatCard = ({ icon: Icon, value, label, colorClass, darkMode }: any) => (
   <div className={`rounded-2xl p-6 transition-all duration-300 border hover:scale-[1.02] ${
@@ -61,7 +58,8 @@ const StatCard = ({ icon: Icon, value, label, colorClass, darkMode }: any) => (
   </div>
 );
 
-export default function Progress({ darkMode }: ProgressProps) {
+export default function Progress() {
+  const darkMode = false;
   // --- STATE MANAGEMENT ---
   const [completedLessons, setCompletedLessons] = useState<Lesson[]>([]);
   const [weeklyStats, setWeeklyStats] = useState<StatItem[]>([]);
@@ -76,38 +74,12 @@ export default function Progress({ darkMode }: ProgressProps) {
         setIsLoading(true);
         setError(null);
 
-        // TODO: Replace this block with your actual API call
-        // const response = await fetch('/api/progress/user-123');
-        // const data = await response.json();
-        
-        // Simulating a network request delay (1.5 seconds)
-        await new Promise(resolve => setTimeout(resolve, 1500));
+        const response = await API.get('/progress/user-123');
+        const data = response.data;
 
-        const mockBackendResponse = {
-          lessons: [
-            { id: 1, title: 'English Grammar: Present Tense', language: 'English', icon: '📚', date: '2026-02-09', time: '14:30', score: 95, duration: '18 min', points: 120 },
-            { id: 2, title: 'English Vocabulary: Common Phrases', language: 'English', icon: '📖', date: '2026-02-08', time: '10:15', score: 88, duration: '22 min', points: 100 },
-            { id: 3, title: 'English Pronunciation Guide', language: 'English', icon: '🗣️', date: '2026-02-08', time: '09:00', score: 92, duration: '15 min', points: 110 },
-          ],
-          stats: [
-            { day: 'Mon', lessons: 2, points: 200 },
-            { day: 'Tue', lessons: 3, points: 320 },
-            { day: 'Wed', lessons: 1, points: 150 },
-            { day: 'Thu', lessons: 2, points: 210 },
-            { day: 'Fri', lessons: 4, points: 450 },
-            { day: 'Sat', lessons: 1, points: 120 },
-            { day: 'Sun', lessons: 2, points: 230 },
-          ],
-          activities: [
-            { id: 1, type: 'achievement', title: 'Earned "Week Warrior" badge', time: '2 hours ago', icon: '🏆' },
-            { id: 2, type: 'lesson', title: 'Completed English Grammar', time: '3 hours ago', icon: '📚' },
-            { id: 3, type: 'streak', title: '15-day streak maintained!', time: '1 day ago', icon: '🔥' },
-          ]
-        };
-
-        setCompletedLessons(mockBackendResponse.lessons);
-        setWeeklyStats(mockBackendResponse.stats);
-        setRecentActivities(mockBackendResponse.activities);
+        setCompletedLessons(data.lessons);
+        setWeeklyStats(data.stats);
+        setRecentActivities(data.activities);
 
       } catch (err) {
         console.error("Failed to fetch progress data:", err);
@@ -158,10 +130,11 @@ export default function Progress({ darkMode }: ProgressProps) {
   }
 
   return (
-    <div className={`min-h-screen p-6 lg:p-10 ${darkMode ? 'text-white' : 'text-gray-900'}`}>
-      <div className="max-w-7xl mx-auto">
-        
-        <Navbar />
+    <div className={`flex flex-col min-h-screen ${darkMode ? 'text-white' : 'text-gray-900'}`}>
+      <div className={`flex-1 p-6 lg:p-10 ${darkMode ? 'bg-gray-900' : 'bg-gray-50'}`}>
+        <div className="max-w-7xl mx-auto">
+          
+          <Navbar />
 
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-10">
           <div>
@@ -273,29 +246,11 @@ export default function Progress({ darkMode }: ProgressProps) {
             </div>
           </div>
         </div>
-
-        {/* Add Footer here */}
-        <Footer /> {/* This line adds your Footer component */}
+        </div>
       </div>
-    </div>
-  );
-}
-import React from 'react';
-import Navbar from '../components/Navbar';
-import Footer from '../components/Footer';
 
-const Progrees: React.FC = () => {
-  return (
-    <div className="page-wrapper">
-      <Navbar isLoggedIn={true} />
-
-      <main className="page-container flex justify-center items-center">
-        <h1 className="text-4xl font-bold text-text-dark mt-20 mb-10">Progress Page</h1>
-      </main>
-
+      {/* Footer outside main content */}
       <Footer />
     </div>
   );
-};
-
-export default Progrees;
+}
