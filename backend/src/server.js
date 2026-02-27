@@ -9,6 +9,7 @@ import otpRoutes from "./routes/otpRoutes.js";
 import userRoutes from "./routes/user-routes.js";
 import assessmentRoutes from "./routes/assessment-routes.js";
 import settingsRoutes from "./routes/settings.routes.js";
+import progressRoutes from "./routes/progress-routes.js";
 import { verifyEmailConfig } from "./services/emailService.js";
 import protect from "./middleware/authMiddleware.js";
 
@@ -44,6 +45,7 @@ app.get("/api/protected", protect, (req, res) => {
   });
 });
 app.use("/api/settings", settingsRoutes);
+app.use("/api/progress", progressRoutes);
 
 // Test route
 app.get("/", (req, res) => {

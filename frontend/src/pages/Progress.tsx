@@ -80,7 +80,7 @@ export default function Progress({ darkMode }: ProgressProps) {
         // const response = await fetch('/api/progress/user-123');
         // const data = await response.json();
 
-        const response = await fetch('http://localhost:5000/api/progress/user-123');
+        const response = await fetch('http://localhost:5001/api/progress/user-123');
         if (!response.ok) throw new Error('Failed to fetch');
         const data = await response.json();
 
@@ -137,10 +137,11 @@ export default function Progress({ darkMode }: ProgressProps) {
   }
 
   return (
-    <div className={`min-h-screen p-6 lg:p-10 ${darkMode ? 'text-white' : 'text-gray-900'}`}>
-      <div className="max-w-7xl mx-auto">
-        
-        <Navbar />
+    <div className={`flex flex-col min-h-screen ${darkMode ? 'text-white' : 'text-gray-900'}`}>
+      <div className={`flex-1 p-6 lg:p-10 ${darkMode ? 'bg-gray-900' : 'bg-gray-50'}`}>
+        <div className="max-w-7xl mx-auto">
+          
+          <Navbar />
 
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-10">
           <div>
@@ -252,10 +253,11 @@ export default function Progress({ darkMode }: ProgressProps) {
             </div>
           </div>
         </div>
-
-        {/* Add Footer here */}
-        <Footer /> {/* This line adds your Footer component */}
+        </div>
       </div>
+
+      {/* Footer outside main content */}
+      <Footer />
     </div>
   );
 }
