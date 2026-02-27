@@ -6,6 +6,6 @@ const app = express();
 
 app.use(cors());
 app.use(express.json());
-app.use('/api/progress', progressRoutes); // ✅ Use imported routes
+app.use('/api/progress', progressRoutes);
 
 export default app;
