@@ -1,12 +1,11 @@
 import User from "../models/user.js";
 import bcrypt from "bcryptjs";
 
+/* =======================================================
+   PUBLIC / ADMIN CRUD (Optional - keep if needed)
+======================================================= */
 
-/* =====================================================
-   ADMIN CRUD (OPTIONAL - can keep for admin use)
-===================================================== */
-
-// READ - Get all users
+// READ - Get all users (Admin use)
 export const getAllUsers = async (req, res) => {
   try {
     const users = await User.find().select("-password");
@@ -16,7 +15,7 @@ export const getAllUsers = async (req, res) => {
   }
 };
 
-// READ - Get single user by ID
+// READ - Get single user by ID (Admin use)
 export const getUserById = async (req, res) => {
   try {
     const user = await User.findById(req.params.id).select("-password");
@@ -31,7 +30,7 @@ export const getUserById = async (req, res) => {
   }
 };
 
-// UPDATE - Update user by ID (admin only)
+// UPDATE - Update user by ID (Admin use)
 export const updateUser = async (req, res) => {
   try {
     const { fullName, email, password } = req.body;
@@ -44,6 +43,7 @@ export const updateUser = async (req, res) => {
 
     if (fullName) user.fullName = fullName;
     if (email) user.email = email;
+
     if (password) {
       user.password = await bcrypt.hash(password, 10);
     }
@@ -55,15 +55,15 @@ export const updateUser = async (req, res) => {
       user: {
         id: user._id,
         fullName: user.fullName,
-        email: user.email,
-      },
+        email: user.email
+      }
     });
   } catch (error) {
     res.status(500).json({ message: "Server error", error: error.message });
   }
 };
 
-// DELETE - Delete user by ID
+// DELETE - Delete user by ID (Admin use)
 export const deleteUser = async (req, res) => {
   try {
     const user = await User.findByIdAndDelete(req.params.id);
@@ -78,11 +78,11 @@ export const deleteUser = async (req, res) => {
   }
 };
 
-/* =====================================================
-   AUTHENTICATED USER ROUTES (MAIN FEATURES)
-===================================================== */
+/* =======================================================
+   LOGGED-IN USER FEATURES (Secure)
+======================================================= */
 
-// ✅ Get logged-in user's profile
+// ✅ Get logged-in user profile
 export const getProfile = async (req, res) => {
   try {
     const user = await User.findById(req.user.userId).select("-password");
@@ -97,11 +97,16 @@ export const getProfile = async (req, res) => {
   }
 };
 
+// ✅ Update logged-in user profile
 export const updateProfile = async (req, res) => {
   try {
     const { fullName, targetLanguage, bio } = req.body;
 
-    const user = req.user; // <-- use existing user
+    const user = await User.findById(req.user.userId);
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
 
     if (fullName) user.fullName = fullName;
     if (targetLanguage) user.targetLanguage = targetLanguage;
@@ -109,12 +114,7 @@ export const updateProfile = async (req, res) => {
 
     await user.save();
 
-    res.status(200).json({
-      success: true,
-      message: "Profile updated successfully",
-      user,
-    });
-
+    res.json({ message: "Profile updated successfully" });
   } catch (error) {
     res.status(500).json({ message: "Failed to update profile" });
   }
@@ -125,15 +125,15 @@ export const addGoal = async (req, res) => {
   try {
     const { title, targetDate } = req.body;
 
-    if (!title) {
-      return res.status(400).json({ message: "Goal title is required" });
+    if (!title || !targetDate) {
+      return res.status(400).json({ message: "Title and target date required" });
     }
 
     const user = await User.findById(req.user.userId);
 
     user.goals.push({
       title,
-      targetDate: targetDate ? new Date(targetDate) : null,
+      targetDate
     });
 
     await user.save();
@@ -144,12 +144,12 @@ export const addGoal = async (req, res) => {
   }
 };
 
-// ✅ Get logged-in user's goals
+// ✅ Get learning goals
 export const getGoals = async (req, res) => {
   try {
     const user = await User.findById(req.user.userId);
 
-    res.json(user.goals || []);
+    res.json(user.goals);
   } catch (error) {
     res.status(500).json({ message: "Failed to fetch goals" });
   }
