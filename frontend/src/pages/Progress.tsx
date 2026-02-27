@@ -1,5 +1,7 @@
 import { useState, useEffect, useMemo } from 'react';
-import Navbar from "frontend/src/components/Navbar.tsx";
+import Navbar from "../components/Navbar"; // Correct import statement
+import Footer from '../components/Footer'; // Correct import statement for Footer
+
 import { 
   Calendar, 
   BookOpen, 
@@ -43,7 +45,6 @@ interface ProgressProps {
 }
 
 // --- SUB-COMPONENTS ---
-
 const StatCard = ({ icon: Icon, value, label, colorClass, darkMode }: any) => (
   <div className={`rounded-2xl p-6 transition-all duration-300 border hover:scale-[1.02] ${
     darkMode ? 'bg-gray-800/50 border-gray-700' : 'bg-white border-gray-100 shadow-sm'
@@ -70,7 +71,6 @@ export default function Progress({ darkMode }: ProgressProps) {
 
   // --- DATA FETCHING LOGIC ---
   useEffect(() => {
-    // This is where you will connect to your Node.js/Express backend
     const fetchProgressData = async () => {
       try {
         setIsLoading(true);
@@ -83,7 +83,6 @@ export default function Progress({ darkMode }: ProgressProps) {
         // Simulating a network request delay (1.5 seconds)
         await new Promise(resolve => setTimeout(resolve, 1500));
 
-        // Mock data representing the backend response
         const mockBackendResponse = {
           lessons: [
             { id: 1, title: 'English Grammar: Present Tense', language: 'English', icon: '📚', date: '2026-02-09', time: '14:30', score: 95, duration: '18 min', points: 120 },
@@ -106,7 +105,6 @@ export default function Progress({ darkMode }: ProgressProps) {
           ]
         };
 
-        // Setting the state with data from "backend"
         setCompletedLessons(mockBackendResponse.lessons);
         setWeeklyStats(mockBackendResponse.stats);
         setRecentActivities(mockBackendResponse.activities);
@@ -120,11 +118,10 @@ export default function Progress({ darkMode }: ProgressProps) {
     };
 
     fetchProgressData();
-  }, []); // Empty dependency array means this runs once when the component mounts
+  }, []); 
 
-  // --- DERIVED STATE (Calculations) ---
   const maxLessons = useMemo(() => {
-    if (weeklyStats.length === 0) return 1; // Prevent division by zero
+    if (weeklyStats.length === 0) return 1;
     return Math.max(...weeklyStats.map((d) => d.lessons));
   }, [weeklyStats]);
 
@@ -133,7 +130,7 @@ export default function Progress({ darkMode }: ProgressProps) {
     const total = completedLessons.reduce((acc, curr) => acc + curr.score, 0);
     return Math.round(total / completedLessons.length);
   }, [completedLessons]);
-  // --- LOADING UI ---
+
   if (isLoading) {
     return (
       <div className={`min-h-screen flex flex-col items-center justify-center ${darkMode ? 'bg-gray-900 text-white' : 'bg-gray-50 text-gray-900'}`}>
@@ -143,7 +140,6 @@ export default function Progress({ darkMode }: ProgressProps) {
     );
   }
 
-  // --- ERROR UI ---
   if (error) {
     return (
       <div className={`min-h-screen flex items-center justify-center ${darkMode ? 'bg-gray-900 text-white' : 'bg-gray-50 text-gray-900'}`}>
@@ -161,12 +157,12 @@ export default function Progress({ darkMode }: ProgressProps) {
     );
   }
 
-  // --- MAIN UI ---
   return (
     <div className={`min-h-screen p-6 lg:p-10 ${darkMode ? 'text-white' : 'text-gray-900'}`}>
       <div className="max-w-7xl mx-auto">
         
-        {/* Header Section */}
+        <Navbar />
+
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-10">
           <div>
             <h1 className="text-4xl font-extrabold tracking-tight">Your Progress</h1>
@@ -180,7 +176,6 @@ export default function Progress({ darkMode }: ProgressProps) {
           </button>
         </div>
 
-        {/* Summary Stats Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
           <StatCard 
             icon={BookOpen} value={completedLessons.length.toString()} label="Total Lessons" 
@@ -201,8 +196,6 @@ export default function Progress({ darkMode }: ProgressProps) {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-          
-          {/* Main Content: Lesson History */}
           <div className="lg:col-span-8 space-y-6">
             <div className={`rounded-3xl p-8 border ${darkMode ? 'bg-gray-800/40 border-gray-700' : 'bg-white border-gray-100 shadow-sm'}`}>
               <div className="flex items-center justify-between mb-8">
@@ -238,10 +231,7 @@ export default function Progress({ darkMode }: ProgressProps) {
             </div>
           </div>
 
-          {/* Sidebar: Activity & Charts */}
           <div className="lg:col-span-4 space-y-8">
-            
-            {/* Weekly Activity Chart */}
             <div className={`rounded-3xl p-6 border ${darkMode ? 'bg-gray-800/40 border-gray-700' : 'bg-white border-gray-100 shadow-sm'}`}>
               <h2 className="text-lg font-bold mb-6">Weekly Activity</h2>
               <div className="flex items-end justify-between gap-2 h-40">
@@ -263,7 +253,6 @@ export default function Progress({ darkMode }: ProgressProps) {
               </div>
             </div>
 
-            {/* Recent Milestones */}
             <div className={`rounded-3xl p-6 border ${darkMode ? 'bg-gray-800/40 border-gray-700' : 'bg-white border-gray-100 shadow-sm'}`}>
               <h2 className="text-lg font-bold mb-6">Recent Milestones</h2>
               <div className="space-y-6">
@@ -282,10 +271,12 @@ export default function Progress({ darkMode }: ProgressProps) {
                 )}
               </div>
             </div>
-
           </div>
         </div>
+
+        {/* Add Footer here */}
+        <Footer /> {/* This line adds your Footer component */}
       </div>
     </div>
   );
-}  
+}
