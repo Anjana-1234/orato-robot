@@ -12,6 +12,7 @@ import {
   ChevronRight,
   Loader2 // Added for loading state
 } from 'lucide-react';
+import API from '../services/api';
 
 // --- TYPES ---
 interface Lesson {
@@ -76,13 +77,8 @@ export default function Progress({ darkMode }: ProgressProps) {
         setIsLoading(true);
         setError(null);
 
-        // TODO: Replace this block with your actual API call
-        // const response = await fetch('/api/progress/user-123');
-        // const data = await response.json();
-
-        const response = await fetch('http://localhost:5001/api/progress/user-123');
-        if (!response.ok) throw new Error('Failed to fetch');
-        const data = await response.json();
+        const response = await API.get('/progress/user-123');
+        const data = response.data;
 
         setCompletedLessons(data.lessons);
         setWeeklyStats(data.stats);
