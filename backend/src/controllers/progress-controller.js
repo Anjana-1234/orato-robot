@@ -68,7 +68,40 @@ app.get('/health', (req, res) => {
 // --- START SERVER ---
 app.listen(PORT, () => {
   console.log(`=================================`);
-  console.log(`🚀 Orato Backend Server Started!`);
-  console.log(`📡 Listening on http://localhost:${PORT}`);
+  console.log(`Orato Backend Server Started!`);
+  console.log(`Listening on http://localhost:${5000}`);
   console.log(`=================================`);
 });
+
+export const getProgress = async (req, res) => {
+  try {
+    const userId = req.params.userId;
+
+    console.log(`Fetching progress for user: ${userId}`);
+
+    // Simulate network delay
+    setTimeout(() => {
+      const mockData = {
+        lessons: [
+          { id: 1, title: 'English Grammar: Present Tense', language: 'English', icon: '📚', date: '2026-02-09', time: '14:30', score: 95, duration: '18 min', points: 120 },
+          { id: 2, title: 'English Vocabulary: Common Phrases', language: 'English', icon: '📖', date: '2026-02-08', time: '10:15', score: 88, duration: '22 min', points: 100 },
+        ],
+        stats: [
+          { day: 'Mon', lessons: 2, points: 200 },
+          { day: 'Tue', lessons: 3, points: 320 },
+          { day: 'Wed', lessons: 1, points: 150 },
+        ],
+        activities: [
+          { id: 1, type: 'achievement', title: 'Earned "Week Warrior" badge', time: '2 hours ago', icon: '🏆' },
+          { id: 2, type: 'lesson', title: 'Completed English Grammar', time: '3 hours ago', icon: '📚' },
+        ]
+      };
+
+      res.status(200).json(mockData);
+    }, 800);
+
+  } catch (error) {
+    console.error("Error fetching progress:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
