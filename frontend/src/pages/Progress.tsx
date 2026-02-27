@@ -41,10 +41,6 @@ interface Activity {
   icon: string;
 }
 
-interface ProgressProps {
-  darkMode: boolean;
-}
-
 // --- SUB-COMPONENTS ---
 const StatCard = ({ icon: Icon, value, label, colorClass, darkMode }: any) => (
   <div className={`rounded-2xl p-6 transition-all duration-300 border hover:scale-[1.02] ${
@@ -62,7 +58,8 @@ const StatCard = ({ icon: Icon, value, label, colorClass, darkMode }: any) => (
   </div>
 );
 
-export default function Progress({ darkMode }: ProgressProps) {
+export default function Progress() {
+  const darkMode = false;
   // --- STATE MANAGEMENT ---
   const [completedLessons, setCompletedLessons] = useState<Lesson[]>([]);
   const [weeklyStats, setWeeklyStats] = useState<StatItem[]>([]);

@@ -31,23 +31,20 @@ export const getProgress = async (req, res) => {
 
     console.log(`Fetching progress for user: ${userId}`);
 
-    // Simulate slight network delay
-    setTimeout(() => {
-      const userData = mockDatabase[userId];
+    const userData = mockDatabase[userId];
 
-      if (!userData) {
-        return res.status(404).json({ message: "User not found" });
-      }
+    if (!userData) {
+      return res.status(404).json({ message: "User not found" });
+    }
 
-      // Send the data back to the React frontend
-      const mockData = {
-        lessons: userData.lessons || [],
-        stats: userData.stats || [],
-        activities: userData.activities || []
-      };
+    // Send the data back to the React frontend
+    const mockData = {
+      lessons: userData.lessons || [],
+      stats: userData.stats || [],
+      activities: userData.activities || []
+    };
 
-      res.status(200).json(mockData);
-    }, 800); // 800ms delay to simulate loading
+    res.status(200).json(mockData);
 
   } catch (error) {
     console.error("Error fetching progress:", error);
