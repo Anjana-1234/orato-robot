@@ -79,35 +79,14 @@ export default function Progress({ darkMode }: ProgressProps) {
         // TODO: Replace this block with your actual API call
         // const response = await fetch('/api/progress/user-123');
         // const data = await response.json();
-        
-        // Simulating a network request delay (1.5 seconds)
-        await new Promise(resolve => setTimeout(resolve, 1500));
 
-        const mockBackendResponse = {
-          lessons: [
-            { id: 1, title: 'English Grammar: Present Tense', language: 'English', icon: '📚', date: '2026-02-09', time: '14:30', score: 95, duration: '18 min', points: 120 },
-            { id: 2, title: 'English Vocabulary: Common Phrases', language: 'English', icon: '📖', date: '2026-02-08', time: '10:15', score: 88, duration: '22 min', points: 100 },
-            { id: 3, title: 'English Pronunciation Guide', language: 'English', icon: '🗣️', date: '2026-02-08', time: '09:00', score: 92, duration: '15 min', points: 110 },
-          ],
-          stats: [
-            { day: 'Mon', lessons: 2, points: 200 },
-            { day: 'Tue', lessons: 3, points: 320 },
-            { day: 'Wed', lessons: 1, points: 150 },
-            { day: 'Thu', lessons: 2, points: 210 },
-            { day: 'Fri', lessons: 4, points: 450 },
-            { day: 'Sat', lessons: 1, points: 120 },
-            { day: 'Sun', lessons: 2, points: 230 },
-          ],
-          activities: [
-            { id: 1, type: 'achievement', title: 'Earned "Week Warrior" badge', time: '2 hours ago', icon: '🏆' },
-            { id: 2, type: 'lesson', title: 'Completed English Grammar', time: '3 hours ago', icon: '📚' },
-            { id: 3, type: 'streak', title: '15-day streak maintained!', time: '1 day ago', icon: '🔥' },
-          ]
-        };
+        const response = await fetch('http://localhost:5000/api/progress/user-123');
+        if (!response.ok) throw new Error('Failed to fetch');
+        const data = await response.json();
 
-        setCompletedLessons(mockBackendResponse.lessons);
-        setWeeklyStats(mockBackendResponse.stats);
-        setRecentActivities(mockBackendResponse.activities);
+        setCompletedLessons(data.lessons);
+        setWeeklyStats(data.stats);
+        setRecentActivities(data.activities);
 
       } catch (err) {
         console.error("Failed to fetch progress data:", err);
