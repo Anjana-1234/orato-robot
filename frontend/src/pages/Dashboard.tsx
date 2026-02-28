@@ -52,9 +52,7 @@ const Dashboard: React.FC = () => {
 
       <div className="flex flex-1">
 
-        {/* Sidebar placeholder — keeps layout spacing without a Sidebar component */}
-        <div className="w-[260px] flex-shrink-0" />
-
+        
         {/* Main Content */}
         <main
           ref={mainRef}
