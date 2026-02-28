@@ -98,8 +98,8 @@ export default function DailyChallenges() {
     >
       {/* Header */}
       <div className="header flex items-center gap-2 mb-5">
-        <div className="w-8 h-8 rounded-lg bg-orato-green-light flex items-center justify-center">
-          <Target className="w-4 h-4 text-orato-green" />
+        <div className="w-8 h-8 rounded-lg bg-emerald-green-light flex items-center justify-center">
+          <Target className="w-4 h-4 text-emerald-green" />
         </div>
         <h3 className="text-lg font-semibold text-gray-900 font-heading">
           Daily Challenges
@@ -124,8 +124,8 @@ export default function DailyChallenges() {
                 </span>
                 <span className={`text-xs font-semibold px-2.5 py-1 rounded-full ${
                   isComplete 
-                    ? 'bg-orato-green text-white' 
-                    : 'bg-orato-green-light text-orato-green'
+                    ? 'bg-emerald-500 text-white' 
+                    : 'bg-emerald-100 text-emerald-600'
                 }`}>
                   +{challenge.points} pts
                 </span>
@@ -137,7 +137,7 @@ export default function DailyChallenges() {
                   <div
                     ref={(el) => { progressRefs.current[index] = el; }}
                     className={`h-full rounded-full transition-all duration-500 relative ${
-                      isComplete ? 'bg-orato-green' : 'bg-orato-green'
+                      isComplete ? 'bg-emerald-300' : 'bg-emerald-300'
                     }`}
                     style={{ width: '0%' }}
                   >
