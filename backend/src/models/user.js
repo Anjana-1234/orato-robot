@@ -32,15 +32,14 @@ const userSchema = new mongoose.Schema({
 
   password: {
     type: String,
-    //  NOT required anymore (Google users won't have password)
-    required: false,
+    required: false, // Optional for Google users
   },
 
-  // ===== NEW: GOOGLE OAUTH FIELDS =====
+  // Google OAuth fields
   googleId: {
     type: String,
     unique: true,
-    sparse: true, // Allows null values, only enforces uniqueness when value exists
+    sparse: true,
   },
 
   profilePicture: {
@@ -48,14 +47,13 @@ const userSchema = new mongoose.Schema({
     default: "",
   },
 
-  //  NEW: Track how user signed up
   authProvider: {
     type: String,
-    enum: ['local', 'google'], // 'local' = email/password, 'google' = Google OAuth
+    enum: ['local', 'google'],
     default: 'local',
   },
 
-  // Personal Info (from registration)
+  // Personal Info
   age: {
     type: Number,
   },
@@ -81,16 +79,13 @@ const userSchema = new mongoose.Schema({
     default: 15,
   },
 
-  // Profile Info
   bio: {
     type: String,
     default: "",
   },
 
-  // Goals
   goals: [goalSchema],
 
-  // Assessment
   skillLevel: {
     type: String,
     enum: ["beginner", "intermediate", "advanced"],
@@ -107,7 +102,6 @@ const userSchema = new mongoose.Schema({
     default: false,
   },
 
-  // Password Reset (only for local auth users)
   resetPasswordToken: {
     type: String,
   },
@@ -116,7 +110,6 @@ const userSchema = new mongoose.Schema({
     type: Date,
   },
 
-  // Timestamps
   createdAt: {
     type: Date,
     default: Date.now,
@@ -128,13 +121,12 @@ const userSchema = new mongoose.Schema({
   },
 });
 
-// Update the updatedAt timestamp before saving
-userSchema.pre('save', function(next) {
+//  FIXED: Update timestamp before saving (no next() needed)
+userSchema.pre('save', function() {
   this.updatedAt = Date.now();
-  next();
 });
 
-// Clean API responses globally - remove password from all queries
+// Clean API responses - hide sensitive data
 userSchema.set("toJSON", {
   transform: (doc, ret) => {
     delete ret.password;
@@ -145,7 +137,6 @@ userSchema.set("toJSON", {
   },
 });
 
-// Also hide sensitive fields in toObject
 userSchema.set("toObject", {
   transform: (doc, ret) => {
     delete ret.password;
@@ -156,9 +147,6 @@ userSchema.set("toObject", {
   },
 });
 
-// Create indexes for better query performance
-userSchema.index({ email: 1 });
-userSchema.index({ googleId: 1 });
-userSchema.index({ createdAt: -1 });
+// Mongoose creates these automatically from unique: true and sparse: true
 
 export default mongoose.models.User || mongoose.model("User", userSchema);
