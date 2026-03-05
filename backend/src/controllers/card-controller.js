@@ -1,9 +1,9 @@
-const Card = require('../models/Card');
+import Card from '../models/card.js';
 
 // @desc    Get 10 random vocabulary cards
 // @route   GET /api/cards/random
 // @access  Public
-exports.getRandomCards = async (req, res) => {
+export const getRandomCards = async (req, res) => {
   try {
     // $sample is the most efficient way to pull random documents from MongoDB
     const randomCards = await Card.aggregate([{ $sample: { size: 10 } }]);

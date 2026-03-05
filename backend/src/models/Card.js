@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
 // Define the structure for a Vocabulary Card
 const cardSchema = new mongoose.Schema({
@@ -22,4 +22,4 @@ const cardSchema = new mongoose.Schema({
   }
 }, { timestamps: true });
 
-module.exports = mongoose.model('Card', cardSchema);
+export default mongoose.model('Card', cardSchema);

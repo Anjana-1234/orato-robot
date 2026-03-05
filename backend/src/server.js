@@ -16,6 +16,7 @@ import userRoutes from "./routes/user-routes.js";
 import assessmentRoutes from "./routes/assessment-routes.js";
 import settingsRoutes from "./routes/settings.routes.js";
 import progressRoutes from "./routes/progress-routes.js";
+import cardRoutes from "./routes/card-routes.js";
 import { verifyEmailConfig } from "./services/emailService.js";
 import protect from "./middleware/authMiddleware.js";
 
@@ -70,6 +71,7 @@ app.use("/api/users", userRoutes);
 app.use("/api/assessment", assessmentRoutes);
 app.use("/api/settings", settingsRoutes);
 app.use("/api/progress", progressRoutes);
+app.use("/api/cards", cardRoutes);
 
 // Protected route test
 app.get("/api/protected", protect, (req, res) => {

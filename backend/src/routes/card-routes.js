@@ -1,9 +1,10 @@
-const express = require('express');
+import express from 'express';
+import { getRandomCards } from '../controllers/card-controller.js';
+
 const router = express.Router();
-const cardController = require('../controllers/cardController');
 
 // Route mapping to the controller function
-// The base URL in app.js will be '/api/cards', so this becomes '/api/cards/random'
-router.get('/random', cardController.getRandomCards);
+// The base URL in server.js will be '/api/cards', so this becomes '/api/cards/random'
+router.get('/random', getRandomCards);
 
-module.exports = router
+export default router;

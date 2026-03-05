@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import API from '../services/api';
 
 // 1. Define TypeScript Interface based on our MongoDB Schema
 interface CardData {
@@ -26,12 +27,8 @@ const VisualCards: React.FC = () => {
     setLoading(true);
     setError(null);
     try {
-      // Ensure this URL matches your Express backend URL & Port
-      const response = await fetch('http://localhost:5000/api/cards/random');
-      if (!response.ok) throw new Error("Failed to fetch data");
-      
-      const data = await response.json();
-      setCards(data);
+      const response = await API.get('/cards/random');
+      setCards(response.data);
     } catch (err) {
       console.error("Fetch error:", err);
       setError("Could not load vocabulary cards. Please check your connection.");
