@@ -145,3 +145,5 @@ const VisualCards: React.FC = () => {
     </div>
   );
 };
+
+export default VisualCards;
