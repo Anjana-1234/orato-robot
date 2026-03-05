@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { gsap } from 'gsap';
-import { Clock, ChevronRight } from 'lucide-react';
+import { Clock, ChevronRight, PlayCircle } from 'lucide-react';
 
 interface Lesson {
   id: number;
@@ -36,9 +36,21 @@ const lessons: Lesson[] = [
     icon: '📖',
     iconBg: 'bg-blue-100',
   },
+  {
+    id: 4,
+    title: 'Visual Vocabulary Cards',
+    timeLeft: '10 min left',
+    progress: 30,
+    icon: '🃏',
+    iconBg: 'bg-yellow-100',
+  },
 ];
 
-export default function ContinueLearning() {
+interface ContinueLearningProps {
+  onLessonClick?: (lessonId: number, lessonTitle: string) => void;
+}
+
+export default function ContinueLearning({ onLessonClick }: ContinueLearningProps = {}) {
   const containerRef = useRef<HTMLDivElement>(null);
   const itemsRef = useRef<(HTMLDivElement | null)[]>([]);
   const progressRefs = useRef<(HTMLDivElement | null)[]>([]);
@@ -164,9 +176,22 @@ export default function ContinueLearning() {
                   </div>
                 </div>
 
-                {/* Arrow on hover */}
-                <div className={`flex-shrink-0 transition-all duration-300 ${isHovered ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-2'}`}>
-                  <ChevronRight className="w-5 h-5 text-orato-green" />
+                {/* Continue Button */}
+                <div className="flex-shrink-0">
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      onLessonClick?.(lesson.id, lesson.title);
+                    }}
+                    className={`flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-semibold transition-all duration-300 ${
+                      isHovered
+                        ? 'bg-green-500 text-white shadow-md scale-105'
+                        : 'bg-green-100 text-green-700 hover:bg-green-200'
+                    }`}
+                  >
+                    <PlayCircle className="w-4 h-4" />
+                    Continue
+                  </button>
                 </div>
               </div>
             </div>
