@@ -1,6 +1,7 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
 
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+// NOTE: genAI is initialized lazily inside the handler so
+// dotenv.config() has already run and GEMINI_API_KEY is available.
 
 // About Orato project (strict system prompt).
 const SYSTEM_PROMPT = `You are an AI assistant for Orato, an English language learning app.
@@ -40,9 +41,22 @@ export const sendChatMessage = async (req, res) => {
             });
         }
 
+        // Check API key at request time (after dotenv has loaded)
+        const apiKey = process.env.GEMINI_API_KEY;
+        if (!apiKey) {
+            console.error("❌ GEMINI_API_KEY is not set in .env file!");
+            return res.status(500).json({
+                success: false,
+                message: "AI service is not configured. Please contact admin.",
+            });
+        }
+
+        // Initialize Gemini lazily (ensures dotenv has already run)
+        const genAI = new GoogleGenerativeAI(apiKey);
+
         // Initialize the Gemini model.
         const model = genAI.getGenerativeModel({
-            model: "gemini-1.5-flash",
+            model: "gemini-2.5-flash",
             systemInstruction: SYSTEM_PROMPT,
         });
 
@@ -69,10 +83,28 @@ export const sendChatMessage = async (req, res) => {
         });
 
     } catch (error) {
-        console.error("❌ Chat error:", error);
+        // Log detailed error info to diagnose the problem
+        console.error("❌ Chat error name:", error?.name);
+        console.error("❌ Chat error message:", error?.message);
+        console.error("❌ Chat error status:", error?.status);
+        console.error("❌ Chat error statusText:", error?.statusText);
+        console.error("❌ Full error:", JSON.stringify(error, null, 2));
+
+        let userMessage = "Failed to get AI response. Please try again.";
+
+        if (error?.status === 400) {
+            userMessage = "Invalid API key. Please check GEMINI_API_KEY in .env";
+        } else if (error?.status === 403) {
+            userMessage = "API key not authorized. Please enable Gemini API in Google Cloud Console.";
+        } else if (error?.status === 429) {
+            userMessage = "Too many requests. Please wait and try again.";
+        } else if (error?.message?.includes("fetch")) {
+            userMessage = "Cannot reach Google AI servers. Check your internet connection.";
+        }
+
         res.status(500).json({
             success: false,
-            message: "Failed to get AI response. Please try again.",
+            message: userMessage,
         });
     }
 };
