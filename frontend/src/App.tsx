@@ -18,6 +18,7 @@ import GoogleCallback from "./pages/GoogleCallback";
 import { Toaster } from "react-hot-toast";
 import Quiz from "./pages/Quiz";
 import QuizDetail from "./pages/QuizDetail";
+import VisualCardsPage from "./pages/VisualCardsPage";
 
 function App() {
   return (
@@ -49,6 +50,9 @@ function App() {
           {/* Quiz Routes */}
           <Route path="/quiz" element={<Quiz />} />
           <Route path="/quiz/:id" element={<QuizDetail />} />
+
+          {/* Visual Cards */}
+          <Route path="/visual-cards" element={<VisualCardsPage />} />
 
           {/* 404 Not Found */}
           <Route
