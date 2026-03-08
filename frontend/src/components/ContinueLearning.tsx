@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { gsap } from 'gsap';
-import { Clock, ChevronRight, PlayCircle } from 'lucide-react';
+import { Clock, ChevronRight, PlayCircle, BookOpen } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 interface Lesson {
   id: number;
@@ -45,10 +46,6 @@ const lessons: Lesson[] = [
     iconBg: 'bg-yellow-100',
   },
 ];
-import { useEffect, useRef } from "react";
-import { gsap } from "gsap";
-import { ChevronRight, BookOpen } from "lucide-react";
-import { useNavigate } from "react-router-dom";
 
 interface ContinueLearningProps {
   onLessonClick?: (lessonId: number, lessonTitle: string) => void;
@@ -57,6 +54,9 @@ interface ContinueLearningProps {
 export default function ContinueLearning({ onLessonClick }: ContinueLearningProps = {}) {
   const containerRef = useRef<HTMLDivElement>(null);
   const quizBtnRef = useRef<HTMLButtonElement>(null);
+  const itemsRef = useRef<(HTMLDivElement | null)[]>([]);
+  const progressRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const [hoveredId, setHoveredId] = useState<number | null>(null);
   const navigate = useNavigate();
 
   useEffect(() => {

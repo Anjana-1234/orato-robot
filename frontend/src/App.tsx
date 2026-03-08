@@ -17,6 +17,7 @@ import ResetPassword from "./pages/ResetPassword";
 import GoogleCallback from "./pages/GoogleCallback";
 import Quiz from "./pages/Quiz";
 import QuizDetail from "./pages/QuizDetail";
+import VisualCardsPage from "./pages/VisualCardsPage";
 import ProtectedRoute from "./components/ProtectedRoute";
 
 import { Toaster } from "react-hot-toast";
@@ -51,6 +52,9 @@ function App() {
           {/* Quiz Routes */}
           <Route path="/quiz" element={<Quiz />} />
           <Route path="/quiz/:id" element={<QuizDetail />} />
+
+          {/* Visual Cards */}
+          <Route path="/visual-cards" element={<VisualCardsPage />} />
 
           {/* 404 Not Found */}
           <Route

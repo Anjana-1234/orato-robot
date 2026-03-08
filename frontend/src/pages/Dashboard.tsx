@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import { gsap } from "gsap";
@@ -11,21 +12,15 @@ import DailyChallenges from "../components/DailyChallenges";
 import SkillProgress from "../components/SkillProgress";
 import RecentAchievements from "../components/RecentAchievements";
 import SpeakingCoach from "../components/SpeakingCoach";
-import VisualCards from "../components/VisualCards";
 
 const Dashboard: React.FC = () => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const mainRef = useRef<HTMLElement>(null);
-  const visualCardsRef = useRef<HTMLDivElement>(null);
+  const navigate = useNavigate();
 
   const handleLessonClick = (_lessonId: number, lessonTitle: string) => {
-    if (lessonTitle === 'Visual Vocabulary Cards' && visualCardsRef.current) {
-      visualCardsRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      // Highlight the VisualCards section briefly
-      visualCardsRef.current.classList.add('ring-2', 'ring-green-400', 'ring-offset-2');
-      setTimeout(() => {
-        visualCardsRef.current?.classList.remove('ring-2', 'ring-green-400', 'ring-offset-2');
-      }, 2000);
+    if (lessonTitle === 'Visual Vocabulary Cards') {
+      navigate('/visual-cards');
     }
   };
 
@@ -78,9 +73,6 @@ const Dashboard: React.FC = () => {
             <div className="space-y-6">
               <SkillProgress />
               <RecentAchievements />
-              <div ref={visualCardsRef} className="transition-all duration-300 rounded-2xl">
-                <VisualCards />
-              </div>
             </div>
           </div>
         </main>
