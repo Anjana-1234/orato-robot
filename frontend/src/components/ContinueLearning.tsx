@@ -45,6 +45,10 @@ const lessons: Lesson[] = [
     iconBg: 'bg-yellow-100',
   },
 ];
+import { useEffect, useRef } from "react";
+import { gsap } from "gsap";
+import { ChevronRight, BookOpen } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 interface ContinueLearningProps {
   onLessonClick?: (lessonId: number, lessonTitle: string) => void;
@@ -52,9 +56,8 @@ interface ContinueLearningProps {
 
 export default function ContinueLearning({ onLessonClick }: ContinueLearningProps = {}) {
   const containerRef = useRef<HTMLDivElement>(null);
-  const itemsRef = useRef<(HTMLDivElement | null)[]>([]);
-  const progressRefs = useRef<(HTMLDivElement | null)[]>([]);
-  const [hoveredId, setHoveredId] = useState<number | null>(null);
+  const quizBtnRef = useRef<HTMLButtonElement>(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -62,52 +65,38 @@ export default function ContinueLearning({ onLessonClick }: ContinueLearningProp
       gsap.fromTo(
         containerRef.current,
         { scale: 0.9, opacity: 0 },
-        { scale: 1, opacity: 1, duration: 0.6, ease: 'expo.out' }
+        { scale: 1, opacity: 1, duration: 0.6, ease: "expo.out" },
       );
 
-      // Items slide in
-      itemsRef.current.forEach((item, index) => {
-        if (item) {
-          gsap.fromTo(
-            item,
-            { x: -50, opacity: 0 },
-            { 
-              x: 0, 
-              opacity: 1, 
-              duration: 0.5, 
-              delay: 0.1 + index * 0.1,
-              ease: 'power2.out',
-            }
-          );
-        }
-      });
-
-      // Progress bars animation
-      progressRefs.current.forEach((progress, index) => {
-        if (progress) {
-          const targetWidth = lessons[index].progress;
-          gsap.fromTo(
-            progress,
-            { width: '0%' },
-            { 
-              width: `${targetWidth}%`, 
-              duration: 1, 
-              delay: 0.5 + index * 0.1,
-              ease: 'expo.out',
-            }
-          );
-        }
-      });
+      // Quiz button bounce in
+      gsap.fromTo(
+        quizBtnRef.current,
+        { scale: 0, opacity: 0 },
+        {
+          scale: 1,
+          opacity: 1,
+          duration: 0.5,
+          delay: 0.3,
+          ease: "elastic.out(1, 0.5)",
+        },
+      );
     });
 
     return () => ctx.revert();
   }, []);
 
+  const handleQuizClick = () => {
+    gsap.to(quizBtnRef.current, {
+      scale: 0.95,
+      duration: 0.1,
+      onComplete: () => {
+        navigate("/quiz");
+      },
+    });
+  };
+
   return (
-    <div 
-      ref={containerRef}
-      className="bg-white rounded-2xl p-6 card-shadow"
-    >
+    <div ref={containerRef} className="bg-white rounded-2xl p-6 card-shadow">
       {/* Header */}
       <div className="flex items-center justify-between mb-5">
         <h3 className="text-lg font-semibold text-gray-900 font-heading">
@@ -205,6 +194,25 @@ export default function ContinueLearning({ onLessonClick }: ContinueLearningProp
           100% { background-position: 1rem 0; }
         }
       `}</style>
+      {/* Quiz Button */}
+      <button
+        ref={quizBtnRef}
+        onClick={handleQuizClick}
+        className="w-full flex items-center justify-between p-4 rounded-xl bg-green-50 hover:bg-green-100 transition-all duration-300 group border border-green-100"
+      >
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-xl bg-green-500 flex items-center justify-center">
+            <BookOpen className="w-5 h-5 text-white" />
+          </div>
+          <div className="text-left">
+            <p className="font-semibold text-gray-900 text-sm">Take a Quiz</p>
+            <p className="text-xs text-gray-500">
+              Test your knowledge & earn points
+            </p>
+          </div>
+        </div>
+        <ChevronRight className="w-5 h-5 text-green-500 transition-transform duration-300 group-hover:translate-x-1" />
+      </button>
     </div>
   );
 }
