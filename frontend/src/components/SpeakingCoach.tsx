@@ -184,8 +184,8 @@ function SpeakingCoach() {
           onClick={startListening}
           disabled={!supported || listening || loading}
           className={`px-4 py-2 rounded-xl border font-semibold ${listening || loading
-              ? "bg-gray-100 cursor-not-allowed"
-              : "bg-green-50 hover:bg-green-100"
+            ? "bg-gray-100 cursor-not-allowed"
+            : "bg-green-50 hover:bg-green-100"
             }`}
         >
           🎤 Start
@@ -195,8 +195,8 @@ function SpeakingCoach() {
           onClick={stopListening}
           disabled={!supported || !listening}
           className={`px-4 py-2 rounded-xl border font-semibold ${!listening
-              ? "bg-gray-100 cursor-not-allowed"
-              : "bg-red-50 hover:bg-red-100"
+            ? "bg-gray-100 cursor-not-allowed"
+            : "bg-red-50 hover:bg-red-100"
             }`}
         >
           ⏹ Stop
@@ -249,7 +249,8 @@ function SpeakingCoach() {
           value={textInput}
           onChange={(e) => setTextInput(e.target.value)}
           placeholder="Type in English…"
-          className="flex-1 px-3 py-2 rounded-xl border border-gray-300 outline-none"
+          disabled={loading}
+          className={`flex-1 px-3 py-2 rounded-xl border border-gray-300 outline-none ${loading ? "bg-gray-100 cursor-not-allowed" : "bg-white"}`}
           onKeyDown={(e) => {
             if (e.key === "Enter") sendText();
           }}
@@ -258,8 +259,8 @@ function SpeakingCoach() {
           onClick={sendText}
           disabled={loading}
           className={`px-4 py-2 rounded-xl border font-bold ${loading
-              ? "bg-gray-100 cursor-not-allowed"
-              : "bg-green-50 hover:bg-green-100"
+            ? "bg-gray-100 cursor-not-allowed"
+            : "bg-green-50 hover:bg-green-100"
             }`}
         >
           Send
