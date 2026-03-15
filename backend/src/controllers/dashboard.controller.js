@@ -63,6 +63,8 @@ export const getDashboard = async (req, res) => {
 export const getStats = async (req, res) => {
   try {
     const user = req.user;
+    const userId = user._id;
+    const skillLevel = user.skillLevel || 'beginner';
     
     const stats = user.stats || {
       dayStreak: 0,
@@ -76,12 +78,40 @@ export const getStats = async (req, res) => {
       lastStreakUpdate: new Date()
     };
 
+    let grammarAttempts = 0;
+    let readingAttempts = 0;
+    let listeningAttempts = 0;
+
+    try {
+      const grammarProgress = await GrammarProgress.findOne({ userId, skillLevel });
+      grammarAttempts = grammarProgress?.completedLevels?.length || 0;
+    } catch (e) {
+      console.error('Error fetching grammar progress:', e);
+    }
+
+    try {
+      const readingProgress = await ReadingProgress.find({ userId, level: skillLevel });
+      readingAttempts = readingProgress.filter(r => r.completed).length;
+    } catch (e) {
+      console.error('Error fetching reading progress:', e);
+    }
+
+    try {
+      const ListeningProgress = (await import('../models/listeningProgress.js')).default;
+      const listeningProgress = await ListeningProgress.find({ userId, level: skillLevel });
+      listeningAttempts = listeningProgress.filter(l => l.completed).length;
+    } catch (e) {
+      console.error('Error fetching listening progress:', e);
+    }
+
+    const totalLessonsDone = grammarAttempts + readingAttempts + listeningAttempts;
+
     res.status(200).json({
       status: 'success',
       data: { 
         stats: {
           ...stats,
-          lessonsDone: stats.lessonsDone || 0
+          lessonsDone: totalLessonsDone
         }
       }
     });

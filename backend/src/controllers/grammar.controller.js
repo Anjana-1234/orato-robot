@@ -211,17 +211,15 @@ export const submitAnswers = async (req, res) => {
       badgeEarned = 'Grammar Master';
     }
 
-    if (passed && isNewLevel) {
-      try {
-        await User.findByIdAndUpdate(userId, { 
-          $inc: { 
-            'stats.lessonsDone': 1,
-            'stats.totalPoints': pointsEarned 
-          } 
-        });
-      } catch (err) {
-        console.error('Failed to update user stats:', err);
-      }
+    try {
+      await User.findByIdAndUpdate(userId, { 
+        $inc: { 
+          'stats.lessonsDone': 1,
+          'stats.totalPoints': pointsEarned 
+        } 
+      });
+    } catch (err) {
+      console.error('Failed to update user stats:', err);
     }
 
     res.status(200).json({
