@@ -68,31 +68,11 @@ export default function SkillProgress() {
 
   useEffect(() => {
     const fetchSkills = async () => {
-      const token = localStorage.getItem("token");
-      const authHeaders = {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-      };
-
       try {
-        const [dashboardRes, grammarRes] = await Promise.all([
-          dashboardService.getSkills(),
-          fetch("http://localhost:5002/api/grammar/progress", {
-            headers: authHeaders,
-          }),
-        ]);
-
-        let grammarPercentage = 0;
-        let grammarCompletedLevels = 0;
-        if (grammarRes.ok) {
-          const grammarData = await grammarRes.json();
-          const completedLevels = grammarData.data?.completedLevels || [];
-          grammarPercentage = Math.round((completedLevels.length / 10) * 100);
-          grammarCompletedLevels = completedLevels.length;
-        }
+        const dashboardRes = await dashboardService.getSkills();
 
         if (dashboardRes.data?.skills?.length > 0) {
-          const fetchedSkills = dashboardRes.data.skills.map(
+          let fetchedSkills = dashboardRes.data.skills.map(
             (s: FetchedSkill) => ({
               name: s.name,
               percentage: s.percentage || 0,
@@ -101,35 +81,26 @@ export default function SkillProgress() {
             }),
           );
 
-          const mergedSkills = defaultSkills.map((defaultSkill) => {
-            const found = fetchedSkills.find(
-              (s: FetchedSkill) => s.name === defaultSkill.name,
-            );
-            if (defaultSkill.name === "Grammar" && found) {
-              return { 
-                ...defaultSkill, 
-                percentage: grammarPercentage,
-                details: {
-                  ...found.details,
-                  completedLevels: grammarCompletedLevels
-                }
-              };
-            }
-            return found ? { ...defaultSkill, ...found } : defaultSkill;
+          // Sort by highest completion (get completed levels from details)
+          const getCompletedCount = (skill: any) => {
+            if (skill.name === 'Grammar') return skill.details?.completedLevels || 0;
+            if (skill.name === 'Reading') return skill.details?.completedReading || 0;
+            if (skill.name === 'Listening') return skill.details?.completedListening || 0;
+            if (skill.name === 'Vocabulary') return skill.details?.completedVocabulary || 0;
+            return skill.percentage || 0;
+          };
+
+          fetchedSkills = fetchedSkills.sort((a: any, b: any) => {
+            return getCompletedCount(b) - getCompletedCount(a);
           });
 
-          setSkills(mergedSkills);
+          setSkills(fetchedSkills);
         } else {
-          setSkills(
-            defaultSkills.map((s) =>
-              s.name === "Grammar"
-                ? { ...s, percentage: grammarPercentage }
-                : s,
-            ),
-          );
+          setSkills(defaultSkills);
         }
       } catch (error) {
         console.error("Failed to fetch skills:", error);
+        setSkills(defaultSkills);
       } finally {
         setLoading(false);
       }
@@ -164,7 +135,6 @@ export default function SkillProgress() {
 
   return (
     <div ref={containerRef} className="bg-white rounded-2xl p-6 card-shadow">
-      {/* Header */}
       <div className="flex items-center gap-2 mb-5">
         <TrendingUp className="w-5 h-5 text-orato-green" />
         <h3 className="text-xl font-semibold text-gray-900 font-heading">
@@ -172,7 +142,6 @@ export default function SkillProgress() {
         </h3>
       </div>
 
-      {/* Skills List */}
       <div className="space-y-4">
         {skills.map((skill, index) => {
           const isHovered = hoveredSkill === skill.name;
@@ -193,14 +162,15 @@ export default function SkillProgress() {
                     ? `Level ${skill.details?.completedReading || 0}`
                     : skill.name === 'Grammar'
                     ? `Level ${skill.details?.completedLevels || 0}`
-                    : skill.name === 'Listening' || skill.name === 'Vocabulary'
-                    ? `Level 0`
+                    : skill.name === 'Vocabulary'
+                    ? `Level ${skill.details?.completedVocabulary || 0}`
+                    : skill.name === 'Listening'
+                    ? `Level ${skill.details?.completedListening || 0}`
                     : <AnimatedPercentage value={skill.percentage} />
                   }
                 </span>
               </div>
 
-              {/* Progress Bar */}
               <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
                 <div
                   ref={(el) => {
