@@ -8,35 +8,13 @@ import ReadingProgress from '../models/readingProgress.js';
 import VocabularyProgress from '../models/vocabularyProgress.js';
 import ListeningProgress from '../models/listeningProgress.js';
 
-const resolveUser = async (req) => {
-  if (req.user) return req.user;
-  return User.findOne();
-};
-
 /**
  * Get full dashboard data
  * GET /api/dashboard
  */
 export const getDashboard = async (req, res) => {
   try {
-    const user = await resolveUser(req);
-    if (!user) {
-      return res.status(200).json({
-        status: 'success',
-        data: {
-          stats: {
-            dayStreak: 0, streakChange: 0, totalPoints: 0,
-            rankPercentile: 0, badgesEarned: 0, badgesToNextLevel: 5,
-            lessonsDone: 0, lessonsThisWeek: 0
-          },
-          continueLearning: [],
-          dailyChallenges: [],
-          skillProgress: [],
-          recentAchievements: []
-        }
-      });
-    }
-    const userId = user._id;
+    const userId = req.user._id;
 
     const [lessons, challenges, skills, achievements] = await Promise.all([
       Lesson.find({ userId }).sort({ order: 1 }).limit(5),
@@ -45,7 +23,7 @@ export const getDashboard = async (req, res) => {
       Achievement.find({ userId }).sort({ earnedAt: -1 }).limit(3)
     ]);
 
-    const stats = user.stats || {
+    const stats = req.user.stats || {
       dayStreak: 0, streakChange: 0, totalPoints: 0,
       rankPercentile: 0, badgesEarned: 0, badgesToNextLevel: 5,
       lessonsDone: 0, lessonsThisWeek: 0
@@ -86,26 +64,9 @@ export const getDashboard = async (req, res) => {
  */
 export const getStats = async (req, res) => {
   try {
-    const user = await resolveUser(req);
-    if (!user) {
-      return res.status(200).json({
-        status: 'success',
-        data: {
-          stats: {
-            dayStreak: 0,
-            streakChange: 0,
-            totalPoints: 0,
-            rankPercentile: 0,
-            badgesEarned: 0,
-            badgesToNextLevel: 5,
-            lessonsDone: 0,
-            lessonsThisWeek: 0,
-            lastStreakUpdate: new Date()
-          }
-        }
-      });
-    }
+    const user = req.user;
     const userId = user._id;
+    const skillLevel = user.skillLevel || 'beginner';
     
     const stats = user.stats || {
       dayStreak: 0,
@@ -175,11 +136,7 @@ export const getStats = async (req, res) => {
  */
 export const getContinueLearning = async (req, res) => {
   try {
-    const user = await resolveUser(req);
-    if (!user) {
-      return res.status(200).json({ status: 'success', data: { lessons: [] } });
-    }
-    const userId = user._id;
+    const userId = req.user._id;
     
     const lessons = await Lesson.find({ userId }).sort({ order: 1 });
 
@@ -206,11 +163,8 @@ export const getContinueLearning = async (req, res) => {
  */
 export const getChallenges = async (req, res) => {
   try {
-    const user = await resolveUser(req);
-    if (!user) {
-      return res.status(200).json({ status: 'success', data: { challenges: [] } });
-    }
-    const userId = user._id;
+    const userId = req.user._id;
+    const skillLevel = req.user.skillLevel || 'beginner';
     
     const today = new Date();
     today.setHours(0, 0, 0, 0);
@@ -281,11 +235,7 @@ export const getChallenges = async (req, res) => {
  */
 export const updateChallengeProgress = async (req, res) => {
   try {
-    const user = await resolveUser(req);
-    if (!user) {
-      return res.status(404).json({ status: 'error', message: 'User not found' });
-    }
-    const userId = user._id;
+    const userId = req.user._id;
     const { type, amount = 1 } = req.body;
     
     const today = new Date();
@@ -321,12 +271,8 @@ export const updateChallengeProgress = async (req, res) => {
  */
 export const getSkills = async (req, res) => {
   try {
-    const user = await resolveUser(req);
-    if (!user) {
-      return res.status(200).json({ status: 'success', data: { skills: [] } });
-    }
-    const userId = user._id;
-    const skillLevel = user.skillLevel || 'beginner';
+    const userId = req.user._id;
+    const skillLevel = req.user.skillLevel || 'beginner';
     
     const skills = await Skill.find({ userId });
     
@@ -505,11 +451,7 @@ export const getSkills = async (req, res) => {
  */
 export const getRecentAchievements = async (req, res) => {
   try {
-    const user = await resolveUser(req);
-    if (!user) {
-      return res.status(200).json({ status: 'success', data: { achievements: [] } });
-    }
-    const userId = user._id;
+    const userId = req.user._id;
     const achievements = await Achievement.find({ userId })
       .sort({ earnedAt: -1 })
       .limit(5);

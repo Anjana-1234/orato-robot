@@ -1,6 +1,5 @@
 import express from 'express';
-import jwt from 'jsonwebtoken';
-import User from '../models/user.js';
+import protect from '../middleware/authMiddleware.js';
 import {
   getDashboard,
   getStats,
@@ -14,21 +13,8 @@ import {
 
 const router = express.Router();
 
-// Optional auth: attach req.user when token exists, fallback handled in controllers
-router.use(async (req, _res, next) => {
-  try {
-    const authHeader = req.headers.authorization;
-    if (authHeader && authHeader.startsWith('Bearer ')) {
-      const token = authHeader.split(' ')[1];
-      const decoded = jwt.verify(token, process.env.JWT_SECRET || 'your-default-secret-key-change-this');
-      const user = await User.findById(decoded.userId);
-      if (user) req.user = user;
-    }
-  } catch (_error) {
-    // Continue unauthenticated
-  }
-  next();
-});
+// All dashboard routes require authentication
+router.use(protect);
 
 router.get('/', getDashboard);
 router.get('/stats', getStats);

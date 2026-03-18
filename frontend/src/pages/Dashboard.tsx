@@ -21,8 +21,15 @@ const Dashboard: React.FC = () => {
   const handleLessonClick = (_lessonId: string | number, lessonTitle: string) => {
     if (lessonTitle === 'Visual Vocabulary Cards') {
       navigate('/visual-cards');
-    } else {
-      navigate('/progress?focus=lessons');
+    } else if (lessonTitle === 'Listening Lab' || lessonTitle === 'English Pronunciation Basics') {
+      navigate('/listening');
+    } else if (lessonTitle === 'Reading Tasks') {
+      navigate('/reading');
+    } else if (lessonTitle === 'Grammar Practice' || lessonTitle === 'Take a Quiz') {
+      navigate('/grammar');
+    } else if (lessonTitle === 'English Vocabulary: Daily Life') {
+      // Navigate to quiz with vocabulary filter pre-selected
+      navigate('/quiz?filter=Vocabulary');
     }
   };
 
