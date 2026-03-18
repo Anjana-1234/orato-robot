@@ -120,15 +120,16 @@ export default function DailyChallenges() {
   const handleChallengeClick = (challenge: Challenge) => {
     switch (challenge.type) {
       case 'lessons':
-        navigate('/grammar');
+        navigate('/progress?focus=challenges');
         break;
       case 'reading':
-        navigate('/reading');
+        navigate('/progress?focus=challenges');
         break;
       case 'listening':
-        navigate('/listening');
+        navigate('/progress?focus=challenges');
         break;
       default:
+        navigate('/progress?focus=challenges');
         break;
     }
   };

@@ -1,12 +1,14 @@
 import { useEffect, useRef, useState } from 'react';
 import { gsap } from 'gsap';
 import { Star, Flame, Zap, BookOpen } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { dashboardService } from '../services/dashboardService';
 
 interface Achievement {
-  id: number;
+  id: number | string;
   title: string;
   description: string;
-  icon: React.ElementType;
+  icon: string;
   iconColor: string;
   iconBg: string;
 }
@@ -16,7 +18,7 @@ const achievements: Achievement[] = [
     id: 1,
     title: 'Week Warrior',
     description: '7-day streak',
-    icon: Flame,
+    icon: 'flame',
     iconColor: 'text-orato-orange',
     iconBg: 'bg-orange-100',
   },
@@ -24,7 +26,7 @@ const achievements: Achievement[] = [
     id: 2,
     title: 'Quick Learner',
     description: 'Completed 10 lessons',
-    icon: Zap,
+    icon: 'zap',
     iconColor: 'text-orato-yellow',
     iconBg: 'bg-yellow-100',
   },
@@ -32,16 +34,47 @@ const achievements: Achievement[] = [
     id: 3,
     title: 'Vocabulary Master',
     description: 'Learned 100 words',
-    icon: BookOpen,
+    icon: 'book-open',
     iconBg: 'bg-green-100',
     iconColor: 'text-orato-green',
   },
 ];
 
+const getIconComponent = (iconName: string) => {
+  switch (iconName) {
+    case 'flame':
+      return Flame;
+    case 'zap':
+      return Zap;
+    case 'book-open':
+      return BookOpen;
+    default:
+      return Star;
+  }
+};
+
 export default function RecentAchievements() {
   const containerRef = useRef<HTMLDivElement>(null);
   const cardsRef = useRef<(HTMLDivElement | null)[]>([]);
-  const [hoveredId, setHoveredId] = useState<number | null>(null);
+  const [hoveredId, setHoveredId] = useState<number | string | null>(null);
+  const [items, setItems] = useState<Achievement[]>(achievements);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchAchievements = async () => {
+      try {
+        const res = await dashboardService.getAchievements();
+        const fetched = res.data?.achievements;
+        if (Array.isArray(fetched) && fetched.length > 0) {
+          setItems(fetched);
+        }
+      } catch (error) {
+        console.error('Failed to fetch achievements:', error);
+      }
+    };
+
+    fetchAchievements();
+  }, []);
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -117,8 +150,8 @@ export default function RecentAchievements() {
 
       {/* Achievements List */}
       <div className="space-y-3" style={{ perspective: '500px' }}>
-        {achievements.map((achievement, index) => {
-          const Icon = achievement.icon;
+        {items.map((achievement, index) => {
+          const Icon = getIconComponent(achievement.icon);
           const isHovered = hoveredId === achievement.id;
           
           return (
@@ -133,6 +166,7 @@ export default function RecentAchievements() {
               onMouseMove={(e) => handleMouseMove(e, index)}
               onMouseEnter={() => setHoveredId(achievement.id)}
               onMouseLeave={() => handleMouseLeave(index)}
+              onClick={() => navigate('/progress?focus=milestones')}
             >
               {/* Icon */}
               <div 

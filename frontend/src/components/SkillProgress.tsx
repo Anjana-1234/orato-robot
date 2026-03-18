@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
 import { TrendingUp } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import { dashboardService } from "../services/dashboardService";
 
 interface Skill {
@@ -67,6 +68,7 @@ export default function SkillProgress() {
   const [hoveredSkill, setHoveredSkill] = useState<string | null>(null);
   const [skills, setSkills] = useState<Skill[]>(defaultSkills);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchSkills = async () => {
@@ -150,9 +152,10 @@ export default function SkillProgress() {
           return (
             <div
               key={skill.name}
-              className="group"
+              className="group cursor-pointer"
               onMouseEnter={() => setHoveredSkill(skill.name)}
               onMouseLeave={() => setHoveredSkill(null)}
+              onClick={() => navigate('/progress?focus=skills')}
             >
               <div className="flex items-center justify-between mb-1.5">
                 <span className="text-sm font-medium text-gray-700">

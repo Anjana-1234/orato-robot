@@ -1,4 +1,5 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useRef } from 'react';
+import { useLocation } from 'react-router-dom';
 import Navbar from "../components/Navbar"; // Correct import statement
 import Footer from '../components/Footer'; // Correct import statement for Footer
 
@@ -13,6 +14,7 @@ import {
   Loader2 // Added for loading state
 } from 'lucide-react';
 import API from '../services/api';
+import { dashboardService } from '../services/dashboardService';
 
 // --- TYPES ---
 interface Lesson {
@@ -34,11 +36,26 @@ interface StatItem {
 }
 
 interface Activity {
-  id: number;
+  id: number | string;
   type: string;
   title: string;
   time: string;
   icon: string;
+}
+
+interface ChallengeItem {
+  id: string;
+  title: string;
+  current: number;
+  target: number;
+  points: number;
+  completed: boolean;
+}
+
+interface SkillItem {
+  id?: string;
+  name: string;
+  percentage: number;
 }
 
 // --- SUB-COMPONENTS ---
@@ -68,10 +85,19 @@ interface Summary {
 
 export default function Progress() {
   const darkMode = false;
+  const location = useLocation();
+  const overviewRef = useRef<HTMLDivElement>(null);
+  const lessonsRef = useRef<HTMLDivElement>(null);
+  const challengesRef = useRef<HTMLDivElement>(null);
+  const skillsRef = useRef<HTMLDivElement>(null);
+  const milestonesRef = useRef<HTMLDivElement>(null);
+
   // --- STATE MANAGEMENT ---
   const [completedLessons, setCompletedLessons] = useState<Lesson[]>([]);
   const [weeklyStats, setWeeklyStats] = useState<StatItem[]>([]);
   const [recentActivities, setRecentActivities] = useState<Activity[]>([]);
+  const [dashboardChallenges, setDashboardChallenges] = useState<ChallengeItem[]>([]);
+  const [dashboardSkills, setDashboardSkills] = useState<SkillItem[]>([]);
   const [summary, setSummary] = useState<Summary>({ totalLessons: 0, avgScore: 0, totalPoints: 0, dayStreak: 0, learningHours: 0 });
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -83,13 +109,24 @@ export default function Progress() {
         setIsLoading(true);
         setError(null);
 
-        const response = await API.get('/progress');
+        const [response, challengesRes, skillsRes] = await Promise.all([
+          API.get('/progress'),
+          dashboardService.getChallenges().catch(() => null),
+          dashboardService.getSkills().catch(() => null),
+        ]);
         const data = response.data;
 
         setCompletedLessons(data.lessons || []);
         setWeeklyStats(data.stats || []);
         setRecentActivities(data.activities || []);
         if (data.summary) setSummary(data.summary);
+
+        if (challengesRes?.data?.challenges) {
+          setDashboardChallenges(challengesRes.data.challenges);
+        }
+        if (skillsRes?.data?.skills) {
+          setDashboardSkills(skillsRes.data.skills);
+        }
 
       } catch (err: any) {
         console.error("Failed to fetch progress data:", err);
@@ -105,6 +142,24 @@ export default function Progress() {
 
     fetchProgressData();
   }, []); 
+
+  useEffect(() => {
+    if (isLoading) return;
+
+    const focus = new URLSearchParams(location.search).get('focus');
+    const targetMap = {
+      overview: overviewRef,
+      lessons: lessonsRef,
+      challenges: challengesRef,
+      skills: skillsRef,
+      milestones: milestonesRef,
+    } as const;
+
+    const target = focus ? targetMap[focus]?.current : null;
+    if (target) {
+      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  }, [location.search, isLoading]);
 
   const maxLessons = useMemo(() => {
     if (weeklyStats.length === 0) return 1;
@@ -157,7 +212,7 @@ export default function Progress() {
           </button>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
+        <div ref={overviewRef} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
           <StatCard 
             icon={BookOpen} value={summary.totalLessons.toString()} label="Total Lessons" 
             colorClass="bg-blue-500/10 text-blue-500" darkMode={darkMode} 
@@ -178,7 +233,7 @@ export default function Progress() {
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
           <div className="lg:col-span-8 space-y-6">
-            <div className={`rounded-3xl p-8 border ${darkMode ? 'bg-gray-800/40 border-gray-700' : 'bg-white border-gray-100 shadow-sm'}`}>
+            <div ref={lessonsRef} className={`rounded-3xl p-8 border ${darkMode ? 'bg-gray-800/40 border-gray-700' : 'bg-white border-gray-100 shadow-sm'}`}>
               <div className="flex items-center justify-between mb-8">
                 <h2 className="text-xl font-bold">Recent Lessons</h2>
                 <button className="text-sm font-semibold text-green-500 hover:underline">View All</button>
@@ -213,6 +268,52 @@ export default function Progress() {
           </div>
 
           <div className="lg:col-span-4 space-y-8">
+            <div ref={challengesRef} className={`rounded-3xl p-6 border ${darkMode ? 'bg-gray-800/40 border-gray-700' : 'bg-white border-gray-100 shadow-sm'}`}>
+              <h2 className="text-lg font-bold mb-4">Daily Challenges</h2>
+              <div className="space-y-3">
+                {dashboardChallenges.length === 0 ? (
+                  <p className={`text-sm ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>No challenge data yet.</p>
+                ) : (
+                  dashboardChallenges.map((challenge) => {
+                    const pct = challenge.target > 0 ? Math.round((challenge.current / challenge.target) * 100) : 0;
+                    return (
+                      <div key={challenge.id} className="p-3 rounded-xl bg-gray-50">
+                        <div className="flex items-center justify-between mb-1">
+                          <p className="text-sm font-semibold text-gray-900">{challenge.title}</p>
+                          <span className="text-xs font-bold text-green-600">+{challenge.points}</span>
+                        </div>
+                        <p className="text-xs text-gray-500 mb-2">{challenge.current}/{challenge.target} completed</p>
+                        <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
+                          <div className="h-full bg-green-400" style={{ width: `${pct}%` }} />
+                        </div>
+                      </div>
+                    );
+                  })
+                )}
+              </div>
+            </div>
+
+            <div ref={skillsRef} className={`rounded-3xl p-6 border ${darkMode ? 'bg-gray-800/40 border-gray-700' : 'bg-white border-gray-100 shadow-sm'}`}>
+              <h2 className="text-lg font-bold mb-4">Skill Snapshot</h2>
+              <div className="space-y-3">
+                {dashboardSkills.length === 0 ? (
+                  <p className={`text-sm ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>No skill data yet.</p>
+                ) : (
+                  dashboardSkills.map((skill) => (
+                    <div key={skill.id || skill.name}>
+                      <div className="flex items-center justify-between mb-1">
+                        <span className="text-sm font-medium text-gray-700">{skill.name}</span>
+                        <span className="text-xs font-semibold text-gray-700">{skill.percentage}%</span>
+                      </div>
+                      <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
+                        <div className="h-full bg-green-400" style={{ width: `${skill.percentage}%` }} />
+                      </div>
+                    </div>
+                  ))
+                )}
+              </div>
+            </div>
+
             <div className={`rounded-3xl p-6 border ${darkMode ? 'bg-gray-800/40 border-gray-700' : 'bg-white border-gray-100 shadow-sm'}`}>
               <h2 className="text-lg font-bold mb-6">Weekly Activity</h2>
               <div className="flex items-end justify-between gap-2 h-40">
@@ -234,7 +335,7 @@ export default function Progress() {
               </div>
             </div>
 
-            <div className={`rounded-3xl p-6 border ${darkMode ? 'bg-gray-800/40 border-gray-700' : 'bg-white border-gray-100 shadow-sm'}`}>
+            <div ref={milestonesRef} className={`rounded-3xl p-6 border ${darkMode ? 'bg-gray-800/40 border-gray-700' : 'bg-white border-gray-100 shadow-sm'}`}>
               <h2 className="text-lg font-bold mb-6">Recent Milestones</h2>
               <div className="space-y-6">
                 {recentActivities.length === 0 ? (
