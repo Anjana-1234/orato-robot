@@ -25,18 +25,12 @@ export const chatWithSpeakingCoach = async (req, res) => {
 
     // Initialize Gemini client lazily
     const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-    const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
-
-    // Provide the system prompt and the user's message
-    const result = await model.generateContent({
-      contents: [
-        {
-          role: "user",
-          parts: [{ text: `${COACH_SYSTEM_PROMPT}\n\nUser: ${message}` }],
-        },
-      ],
+    const model = genAI.getGenerativeModel({
+      model: "gemini-2.0-flash",
+      systemInstruction: COACH_SYSTEM_PROMPT,
     });
 
+    const result = await model.generateContent(message);
     const responseText = result.response.text();
 
     // Send response to frontend
