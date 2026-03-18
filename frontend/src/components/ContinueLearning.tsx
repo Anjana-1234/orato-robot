@@ -1,10 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
-import {
-  Clock,
-  ChevronRight,
-  PlayCircle,
-} from "lucide-react";
+import { ChevronRight, PlayCircle } from 'lucide-react';
+import { useNavigate } from "react-router-dom";
 import { dashboardService } from "../services/dashboardService";
 
 interface Lesson {
@@ -17,6 +14,7 @@ interface Lesson {
   isGrammar?: boolean;
   isReading?: boolean;
   isListening?: boolean;
+  isVocabulary?: boolean;
   completedLevels?: number;
   totalLevels?: number;
   points?: number;
@@ -38,6 +36,7 @@ const defaultLessons: Lesson[] = [
     progress: 0,
     icon: "🎧",
     iconBg: "bg-orange-100",
+    isListening: true,
   },
   {
     id: 5,
@@ -46,6 +45,16 @@ const defaultLessons: Lesson[] = [
     progress: 0,
     icon: "📚",
     iconBg: "bg-green-100",
+    isReading: true,
+  },
+  {
+    id: 6,
+    title: "Vocabulary Practice",
+    timeLeft: "10 min left",
+    progress: 0,
+    icon: "🔤",
+    iconBg: "bg-blue-100",
+    isVocabulary: true,
   },
   {
     id: 1,
@@ -54,6 +63,7 @@ const defaultLessons: Lesson[] = [
     progress: 0,
     icon: "✍️",
     iconBg: "bg-purple-100",
+    isGrammar: true,
   },
 ];
 
@@ -70,19 +80,62 @@ export default function ContinueLearning({
   const [hoveredId, setHoveredId] = useState<number | string | null>(null);
   const [lessons, setLessons] = useState<Lesson[]>([]);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
   const displayedLessons = lessons.length > 0 ? lessons : defaultLessons;
 
   useEffect(() => {
     const fetchLessons = async () => {
       try {
-        const res = await dashboardService.getContinueLearning();
-        if (res.data?.lessons) {
-          // Only use default lessons, ignore backend Grammar/Reading/Listening
-          setLessons(defaultLessons);
-        } else {
-          setLessons(defaultLessons);
-        }
+        const token = localStorage.getItem("token");
+        console.log("ContinueLearning - Token:", token ? "exists" : "null");
+        
+        const skillsRes = await dashboardService.getSkills();
+        console.log("ContinueLearning - Skills response:", skillsRes);
+        
+        const skills = skillsRes.data?.skills || [];
+        const grammarSkill = skills.find((s: any) => s.name === 'Grammar');
+        const readingSkill = skills.find((s: any) => s.name === 'Reading');
+        const listeningSkill = skills.find((s: any) => s.name === 'Listening');
+        const vocabularySkill = skills.find((s: any) => s.name === 'Vocabulary');
+
+        const updatedLessons = defaultLessons.map((lesson) => {
+          if (lesson.isGrammar && grammarSkill) {
+            return {
+              ...lesson,
+              completedLevels: grammarSkill.details?.completedLevels || 0,
+              totalLevels: grammarSkill.details?.totalLevels || 10,
+              progress: grammarSkill.percentage || 0,
+            };
+          }
+          if (lesson.isReading && readingSkill) {
+            return {
+              ...lesson,
+              completedLevels: readingSkill.details?.completedReading || 0,
+              totalLevels: readingSkill.details?.totalReading || 10,
+              progress: readingSkill.percentage || 0,
+            };
+          }
+          if (lesson.isListening && listeningSkill) {
+            return {
+              ...lesson,
+              completedLevels: listeningSkill.details?.completedListening || 0,
+              totalLevels: listeningSkill.details?.totalListening || 10,
+              progress: listeningSkill.percentage || 0,
+            };
+          }
+          if (lesson.isVocabulary && vocabularySkill) {
+            return {
+              ...lesson,
+              completedLevels: vocabularySkill.details?.completedVocabulary || 0,
+              totalLevels: vocabularySkill.details?.totalVocabulary || 10,
+              progress: vocabularySkill.percentage || 0,
+            };
+          }
+          return lesson;
+        });
+
+        setLessons(updatedLessons);
       } catch (error) {
         console.error("Failed to fetch lessons:", error);
         setLessons(defaultLessons);
@@ -120,7 +173,19 @@ export default function ContinueLearning({
   }, [loading, displayedLessons]);
 
   const handleLessonClick = (lesson: Lesson) => {
-    onLessonClick?.(lesson.id, lesson.title);
+    if (lesson.title === "Visual Vocabulary Cards") {
+      navigate("/visual-cards");
+    } else if (lesson.title === "Listening Lab") {
+      navigate("/listening");
+    } else if (lesson.title === "Reading Tasks") {
+      navigate("/reading");
+    } else if (lesson.title === "Vocabulary Practice") {
+      navigate("/vocabulary");
+    } else if (lesson.title === "Grammar Practice") {
+      navigate("/grammar");
+    } else {
+      onLessonClick?.(lesson.id, lesson.title);
+    }
   };
 
   if (loading) {
@@ -137,7 +202,6 @@ export default function ContinueLearning({
 
   return (
     <div ref={containerRef} className="bg-white rounded-2xl p-6 card-shadow">
-      {/* Header */}
       <div className="flex items-center justify-between mb-5">
         <h3 className="text-2xl font-semibold text-gray-900 font-heading">
           Continue Learning
@@ -148,7 +212,6 @@ export default function ContinueLearning({
         </button>
       </div>
 
-      {/* Lessons List */}
       <div className="space-y-4">
         {displayedLessons.map((lesson, index) => {
           const isHovered = hoveredId === lesson.id;
@@ -169,25 +232,17 @@ export default function ContinueLearning({
               onClick={() => handleLessonClick(lesson)}
             >
               <div className="flex items-start gap-4">
-                {/* Icon */}
                 <div
                   className={`w-12 h-12 rounded-xl ${lesson.iconBg} flex items-center justify-center text-2xl flex-shrink-0 transition-transform duration-300 ${isHovered ? "scale-110" : ""}`}
                 >
                   {lesson.icon}
                 </div>
 
-                {/* Content */}
                 <div className="flex-1 min-w-0">
                   <h4 className="font-semibold text-gray-900 text-base mb-1 truncate">
                     {lesson.title}
                   </h4>
 
-                  <div className="flex items-center gap-2 text-gray-500 text-xs mb-3">
-                    <Clock className="w-3.5 h-3.5" />
-                    <span>{lesson.timeLeft}</span>
-                  </div>
-
-                  {/* Progress Bar */}
                   <div className="relative">
                     <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
                       <div
@@ -209,14 +264,13 @@ export default function ContinueLearning({
                       </div>
                     </div>
                     <p className="text-xs text-gray-500 mt-1.5">
-                      {lesson.isGrammar || lesson.isReading || lesson.isListening
-                        ? `Level ${lesson.completedLevels || 0} completed`
+                      {lesson.isGrammar || lesson.isReading || lesson.isListening || lesson.isVocabulary
+                        ? `Level ${lesson.completedLevels || 0}/${lesson.totalLevels || 10} (${lesson.progress}%)`
                         : `${lesson.progress}% complete`}
                     </p>
                   </div>
                 </div>
 
-                {/* Continue Button */}
                 <div className="flex-shrink-0">
                   <button
                     onClick={(e) => {

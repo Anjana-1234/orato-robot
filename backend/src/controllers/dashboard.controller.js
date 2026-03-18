@@ -5,6 +5,8 @@ import Skill from '../models/skill.js';
 import Achievement from '../models/achievement.js';
 import GrammarProgress from '../models/grammarProgress.js';
 import ReadingProgress from '../models/readingProgress.js';
+import VocabularyProgress from '../models/vocabularyProgress.js';
+import ListeningProgress from '../models/listeningProgress.js';
 
 /**
  * Get full dashboard data
@@ -81,30 +83,37 @@ export const getStats = async (req, res) => {
     let grammarAttempts = 0;
     let readingAttempts = 0;
     let listeningAttempts = 0;
+    let vocabularyAttempts = 0;
 
     try {
-      const grammarProgress = await GrammarProgress.findOne({ userId, skillLevel });
-      grammarAttempts = grammarProgress?.completedLevels?.length || 0;
+      const grammarProgressData = await GrammarProgress.findOne({ userId });
+      grammarAttempts = grammarProgressData?.completedLevels?.length || 0;
     } catch (e) {
       console.error('Error fetching grammar progress:', e);
     }
 
     try {
-      const readingProgress = await ReadingProgress.find({ userId, level: skillLevel });
-      readingAttempts = readingProgress.filter(r => r.completed).length;
+      const readingProgressData = await ReadingProgress.find({ userId });
+      readingAttempts = readingProgressData.filter(r => r.completed).length;
     } catch (e) {
       console.error('Error fetching reading progress:', e);
     }
 
     try {
-      const ListeningProgress = (await import('../models/listeningProgress.js')).default;
-      const listeningProgress = await ListeningProgress.find({ userId, level: skillLevel });
-      listeningAttempts = listeningProgress.filter(l => l.completed).length;
+      const listeningProgressData = await ListeningProgress.find({ userId });
+      listeningAttempts = listeningProgressData.filter(l => l.completed).length;
     } catch (e) {
       console.error('Error fetching listening progress:', e);
     }
 
-    const totalLessonsDone = grammarAttempts + readingAttempts + listeningAttempts;
+    try {
+      const vocabularyProgressData = await VocabularyProgress.find({ userId });
+      vocabularyAttempts = vocabularyProgressData.filter(v => v.completed).length;
+    } catch (e) {
+      console.error('Error fetching vocabulary progress:', e);
+    }
+
+    const totalLessonsDone = grammarAttempts + readingAttempts + listeningAttempts + vocabularyAttempts;
 
     res.status(200).json({
       status: 'success',
@@ -280,11 +289,12 @@ export const getSkills = async (req, res) => {
     let readingPoints = 0;
     
     try {
-      const readingProgress = await ReadingProgress.find({ userId, level: skillLevel });
-      completedReading = readingProgress.filter(r => r.completed).length;
-      totalReading = 10;
-      readingPercentage = Math.round((completedReading / totalReading) * 100);
-      readingPoints = readingProgress.reduce((sum, r) => sum + (r.score || 0), 0);
+      const ReadingContent = (await import('../models/readingContent.js')).default;
+      const readingProgressData = await ReadingProgress.find({ userId, level: skillLevel });
+      completedReading = readingProgressData.filter(r => r.completed).length;
+      totalReading = await ReadingContent.countDocuments({ level: skillLevel });
+      readingPercentage = totalReading > 0 ? Math.round((completedReading / totalReading) * 100) : 0;
+      readingPoints = readingProgressData.reduce((sum, r) => sum + (r.score || 0), 0);
     } catch (readingError) {
       console.error('Error fetching reading progress:', readingError);
     }
@@ -339,6 +349,86 @@ export const getSkills = async (req, res) => {
           totalReading,
           completedReading,
           points: readingPoints
+        }
+      });
+    }
+
+    // Get Listening Progress
+    let listeningPercentage = 0;
+    let completedListening = 0;
+    let totalListening = 0;
+    let listeningPoints = 0;
+
+    try {
+      const ListeningContent = (await import('../models/listeningContent.js')).default;
+      const listeningProgressData = await ListeningProgress.find({ userId, level: skillLevel });
+      completedListening = listeningProgressData.filter(l => l.completed).length;
+      totalListening = await ListeningContent.countDocuments({ level: skillLevel });
+      listeningPercentage = totalListening > 0 ? Math.round((completedListening / totalListening) * 100) : 0;
+      listeningPoints = listeningProgressData.reduce((sum, l) => sum + (l.correctAnswers || 0), 0);
+    } catch (listeningError) {
+      console.error('Error fetching listening progress:', listeningError);
+    }
+
+    const listeningSkillIndex = skillsWithGrammar.findIndex(s => s.name === 'Listening');
+    if (listeningSkillIndex >= 0) {
+      skillsWithGrammar[listeningSkillIndex].percentage = listeningPercentage;
+      skillsWithGrammar[listeningSkillIndex].details = {
+        ...skillsWithGrammar[listeningSkillIndex].details,
+        totalListening,
+        completedListening,
+        points: listeningPoints
+      };
+    } else {
+      skillsWithGrammar.push({
+        id: 'listening',
+        name: 'Listening',
+        percentage: listeningPercentage,
+        color: '#F97316',
+        details: {
+          totalListening,
+          completedListening,
+          points: listeningPoints
+        }
+      });
+    }
+
+    // Get Vocabulary Progress
+    let vocabularyPercentage = 0;
+    let completedVocabulary = 0;
+    let totalVocabulary = 0;
+    let vocabularyPoints = 0;
+
+    try {
+      const VocabularyContent = (await import('../models/vocabularyContent.js')).default;
+      const vocabularyProgressData = await VocabularyProgress.find({ userId, level: skillLevel });
+      completedVocabulary = vocabularyProgressData.filter(v => v.completed).length;
+      totalVocabulary = await VocabularyContent.countDocuments({ level: skillLevel });
+      vocabularyPercentage = totalVocabulary > 0 ? Math.round((completedVocabulary / totalVocabulary) * 100) : 0;
+      vocabularyPoints = vocabularyProgressData.reduce((sum, v) => sum + (v.score || 0), 0);
+    } catch (vocabError) {
+      console.error('Error fetching vocabulary progress:', vocabError);
+    }
+
+    const vocabularySkillIndex = skillsWithGrammar.findIndex(s => s.name === 'Vocabulary');
+    if (vocabularySkillIndex >= 0) {
+      skillsWithGrammar[vocabularySkillIndex].percentage = vocabularyPercentage;
+      skillsWithGrammar[vocabularySkillIndex].details = {
+        ...skillsWithGrammar[vocabularySkillIndex].details,
+        totalVocabulary,
+        completedVocabulary,
+        points: vocabularyPoints
+      };
+    } else {
+      skillsWithGrammar.push({
+        id: 'vocabulary',
+        name: 'Vocabulary',
+        percentage: vocabularyPercentage,
+        color: '#10B981',
+        details: {
+          totalVocabulary,
+          completedVocabulary,
+          points: vocabularyPoints
         }
       });
     }
