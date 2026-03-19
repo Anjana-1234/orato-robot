@@ -17,6 +17,10 @@ const VisualCards: React.FC = () => {
   const [isFlipped, setIsFlipped] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [failedImages, setFailedImages] = useState<Record<string, boolean>>({});
+
+  const getFallbackImageUrl = (word: string) =>
+    `https://placehold.co/400x400/F3F4F6/111827?text=${encodeURIComponent(word)}`;
 
   // 2. Fetch data from backend when the component loads
   useEffect(() => {
@@ -77,6 +81,9 @@ const VisualCards: React.FC = () => {
   if (cards.length === 0) return <div className="text-center p-12 text-lg text-gray-500">No cards found in the database.</div>;
 
   const currentCard = cards[currentIndex];
+  const currentImageSrc = failedImages[currentCard._id]
+    ? getFallbackImageUrl(currentCard.word)
+    : currentCard.imageUrl;
 
   return (
     <div className="flex flex-col items-center font-sans max-w-[600px] mx-auto mt-10 p-5 bg-gray-50 rounded-xl shadow-sm">
@@ -104,7 +111,7 @@ const VisualCards: React.FC = () => {
           </div>
 
           {/* BACK OF CARD: Word, Definition, and Audio */}
-          <div className="absolute w-full h-full [backface-visibility:hidden] rounded-2xl shadow-lg flex flex-col justify-center items-center p-5 overflow-hidden bg-blue-600 text-white [transform:rotateY(180deg)]">
+          <div className="absolute w-full h-full [backface-visibility:hidden] rounded-2xl shadow-lg flex flex-col justify-center items-center p-5 overflow-hidden bg-green-600 text-white [transform:rotateY(180deg)]">
             <h3 className="text-5xl m-0 mb-2.5 capitalize">{currentCard.word}</h3>
             <p className="text-xl leading-relaxed mb-7 opacity-90">{currentCard.definition}</p>
 
